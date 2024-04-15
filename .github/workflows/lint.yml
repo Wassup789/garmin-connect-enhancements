@@ -8,7 +8,6 @@ on:
 
 jobs:
   lint:
-    runs-on: self-hosted
     strategy:
       matrix:
         node-version: [ 20.x ]
