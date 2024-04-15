@@ -1,7 +1,7 @@
 {
   "name": "garmin-connect-enhancements",
   "version": "1.0.0",
-  "description": "Upgrade your experience using Garmin Connect on Web with an enhanced exercise search, filtering by muscle groups, previews, and more",
+  "description": "Upgrade your experience using Garmin Connect Web with an enhanced exercise search, filtering by muscle groups, previews, and more",
   "main": "src/app.ts",
   "author": "Wassup789 <git@wassup789.com>",
   "license": "MIT",

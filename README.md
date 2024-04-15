@@ -4,7 +4,7 @@
 
 # Enhancements for Garmin Connect Web
 
-Upgrade your experience using Garmin Connect on Web with an enhanced exercise search, filtering by muscle groups, previews, and more.
+Upgrade your experience using Garmin Connect Web with an enhanced exercise search, filtering by muscle groups, previews, and more.
 
 Available as a Chrome extension / Firefox add-on or [installed via a UserScript manager](https://github.com/Wassup789/garmin-connect-enhancements/releases/latest/download/garmin-connect-enhancements.user.js
 ) ([Violentmonkey](https://violentmonkey.github.io) or [Tampermonkey](https://www.tampermonkey.net)).
