@@ -1,0 +1,17 @@
+  name: Feature Request
+  description: Request a feature to be added to Enhancements for Garmin Connect
+  labels:
+      - enhancement
+  body:
+    - type: textarea
+      id: description
+      attributes:
+        label: Description of the problem to be solved
+      validations:
+        required: true
+    - type: textarea
+      id: solution
+      attributes:
+        label: Solution to the problem
+      validations:
+        required: true

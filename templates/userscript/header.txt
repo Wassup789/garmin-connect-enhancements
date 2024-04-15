@@ -1,0 +1,14 @@
+// ==UserScript==
+// @name        Enhancements for Garmin Connect Web
+// @namespace   https://wassup789.com
+// @version     [VERSION]
+// @description [DESCRIPTION]
+// @author      Wassup789
+// @icon        https://raw.githubusercontent.com/Wassup789/garmin-connect-enhancements/main/assets/logo-128.png
+// @homepageURL https://github.com/Wassup789/garmin-connect-enhancements
+// @downloadURL https://github.com/Wassup789/garmin-connect-enhancements/releases/latest/download/garmin-connect-enhancements.user.js
+// @updateURL   https://github.com/Wassup789/garmin-connect-enhancements/releases/latest/download/garmin-connect-enhancements.user.js
+// @supportURL  https://github.com/Wassup789/garmin-connect-enhancements/issues
+// @match       https://connect.garmin.com/*
+// @grant       none
+// ==/UserScript==

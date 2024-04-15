@@ -1,0 +1,42 @@
+{
+  "name": "garmin-connect-enhancements",
+  "version": "1.0.0",
+  "description": "Upgrade your experience using Garmin Connect on Web with an enhanced exercise search, filtering by muscle groups, previews, and more",
+  "main": "src/app.ts",
+  "author": "Wassup789 <git@wassup789.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build:prod": "vite build --mode production",
+    "build:dev": "vite build --mode development",
+    "package:add-userscript-header": "node scripts/add-userscript-header.js",
+    "package:setup-browser": "node scripts/setup-browser.js",
+    "watch:build": "vite build --watch --mode development",
+    "watch:add-userscript-header": "nodemon --watch ./build/* --exec \"yarn run package:add-userscript-header\"",
+    "watch:setup-browser": "nodemon --watch ./build/* --exec \"yarn run package:setup-browser\"",
+    "dev": "concurrently \"yarn run watch:build\" \"npm run watch:add-userscript-header\" \"npm run watch:setup-browser\"",
+    "prod": "yarn run build:prod && yarn run package:add-userscript-header && yarn run package:setup-browser"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@stylistic/eslint-plugin": "^1.7.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^9.0.0",
+    "nodemon": "^3.1.0",
+    "rollup-plugin-minify-html-literals": "^1.2.6",
+    "ts-lit-plugin": "^2.0.2",
+    "typescript": "^5.4.2",
+    "typescript-eslint": "^7.6.0",
+    "vite": "^5.1.7"
+  },
+  "dependencies": {
+    "lit": "^3.1.2"
+  },
+  "engines": {
+    "node": ">=20.9.0",
+    "npm": "please-use-yarn",
+    "yarn": ">=4.0.0"
+  },
+  "engineStrict": true,
+  "packageManager": "yarn@4.1.1"
+}

@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Enhancements for Garmin Connect",
+  "version": [VERSION],
+  "description": [DESCRIPTION],
+  "icons": {
+    "16": "logo-16.png",
+    "32": "logo-32.png",
+    "48": "logo-48.png",
+    "128": "logo-128.png"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "content-script.js"
+      ],
+      "matches": ["*://connect.garmin.com/*"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["app.js"],
+      "matches": ["*://connect.garmin.com/*"]
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{5CFAA307-1C53-4C35-AF2F-4EDC372CA350}"
+    }
+  }
+}

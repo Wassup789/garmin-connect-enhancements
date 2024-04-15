@@ -1,0 +1,41 @@
+name: Lint
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [ 20.x ]
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            **.ts
+            **.js
+      - name: Has changed files
+        if: steps.changed-files.outputs.any_changed != 'true'
+        run: echo "No changed files found, aborting action"
+      - name: Setup node ${{ matrix.node-version }}
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: corepack enable
+        if: steps.changed-files.outputs.any_changed == 'true'
+      - run: yarn install
+        if: steps.changed-files.outputs.any_changed == 'true'
+      - name: Run ESLint
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: yarn eslint ${{ steps.changed-files.outputs.all_changed_files }}
