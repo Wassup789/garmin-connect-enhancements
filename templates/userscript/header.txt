@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Enhancements for Garmin Connect Web
+// @name        Enhancements for Garmin Connect
 // @namespace   https://wassup789.com
 // @version     [VERSION]
 // @description [DESCRIPTION]

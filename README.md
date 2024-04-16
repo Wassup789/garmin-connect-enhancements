@@ -1,16 +1,25 @@
+<h1 align="center">Enhancements for Garmin Connect</h1>
+<div align="center">
+<picture>
+    <img width="128" src="assets/logo-128.png"/>
+</picture>
+<br>
+<br>
+
 [![][build-shield]][build-url]
 [![MIT License][license-shield]][license-url]
 [![Lit][lit-shield]][lit-url]
 
-# Enhancements for Garmin Connect Web
+
+[<img height="58" src="assets/chrome-web-store.svg"/>][cws-url]
+<span>&nbsp;</span>
+[<img height="58" src="assets/firefox-addon.svg"/>][faddon-url]
+</div>
 
 Upgrade your experience using Garmin Connect Web with an enhanced exercise search, filtering by muscle groups, previews, and more.
 
-Available as a [Chrome extension][cws-url] / [Firefox add-on][faddon-url] or [installed via a UserScript manager](https://github.com/Wassup789/garmin-connect-enhancements/releases/latest/download/garmin-connect-enhancements.user.js
+Available as a [Chrome extension][cws-url], [Firefox add-on][faddon-url], or [installed via a UserScript manager](https://github.com/Wassup789/garmin-connect-enhancements/releases/latest/download/garmin-connect-enhancements.user.js
 ) ([Violentmonkey](https://violentmonkey.github.io) or [Tampermonkey](https://www.tampermonkey.net)).
-
-[<img height="58" src="assets/chrome-web-store.svg"/>][cws-url]
-[<img height="58" src="assets/firefox-addon.svg"/>][faddon-url]
 
 ## Features
 <!-- TOC -->
