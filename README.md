@@ -6,6 +6,7 @@
 <br>
 <br>
 
+[![][version-shield]][version-url]
 [![][build-shield]][build-url]
 [![MIT License][license-shield]][license-url]
 [![Lit][lit-shield]][lit-url]
@@ -100,6 +101,8 @@ Favorite the exercises you frequently use to access them effortlessly later.
 [build-url]: https://github.com/Wassup789/garmin-connect-enhancements/actions/workflows/build.yml
 [lit-shield]: https://img.shields.io/badge/lit-334eff?style=for-the-badge&logo=lit&logoColor=white
 [lit-url]: https://lit.dev/
+[version-shield]: https://img.shields.io/github/v/release/Wassup789/garmin-connect-enhancements?sort=semver&style=for-the-badge
+[version-url]: https://github.com/Wassup789/garmin-connect-enhancements/releases/latest
 
 [cws-url]: https://chromewebstore.google.com/detail/enhancements-for-garmin-c/njkiagpmnaanjngcpopgpibcpfojmnja
 [faddon-url]: https://addons.mozilla.org/en-CA/firefox/addon/garmin-connect-enhancements/
