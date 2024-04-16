@@ -6,11 +6,11 @@
 
 Upgrade your experience using Garmin Connect Web with an enhanced exercise search, filtering by muscle groups, previews, and more.
 
-Available as a Chrome extension / Firefox add-on or [installed via a UserScript manager](https://github.com/Wassup789/garmin-connect-enhancements/releases/latest/download/garmin-connect-enhancements.user.js
+Available as a [Chrome extension][cws-url] / [Firefox add-on][faddon-url] or [installed via a UserScript manager](https://github.com/Wassup789/garmin-connect-enhancements/releases/latest/download/garmin-connect-enhancements.user.js
 ) ([Violentmonkey](https://violentmonkey.github.io) or [Tampermonkey](https://www.tampermonkey.net)).
 
-<img height="58" src="assets/chrome-web-store.svg"/>
-<img height="58" src="assets/firefox-addon.svg"/>
+[<img height="58" src="assets/chrome-web-store.svg"/>][cws-url]
+[<img height="58" src="assets/firefox-addon.svg"/>][faddon-url]
 
 ## Features
 <!-- TOC -->
@@ -29,10 +29,10 @@ when typing a workout name and does not automatically select the most relevant w
 
 The following demos showcase the improvements made to the original implementation: 
 
-| Description                                           | Original Implementation vs Enhanced Search                                                                                                                                                                                                                                    |
-|-------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Enabling out-of-order and partial word search         | <video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/b1a59d31-3afd-4437-9f89-59770aa7b97b"></video>                                                                                                                                                   |
-| Automatically selecting workouts by it's relevancy     | <video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/ce328715-4d4c-4064-b961-7585527ec1f1"></video>                                                                                                                                                   |
+| Description                                           | Original Implementation vs Enhanced Search                                                                                                                                                                                                                                                         |
+|-------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Enabling out-of-order and partial word search         | <video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/b1a59d31-3afd-4437-9f89-59770aa7b97b"></video>                                                                                                                                                    |
+| Automatically selecting workouts by it's relevancy    | <video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/ce328715-4d4c-4064-b961-7585527ec1f1"></video>                                                                                                                                                    |
 | Improved search for diacritics and special characters | <video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/7acb2a4c-c9e1-40e4-b7a1-dfb7d7d7a648"></video><br><video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/f5bbd4b0-d8b3-4429-b0b0-e9898dba4abb"></video> |
 
 
@@ -91,3 +91,6 @@ Favorite the exercises you frequently use to access them effortlessly later.
 [build-url]: https://github.com/Wassup789/garmin-connect-enhancements/actions/workflows/build.yml
 [lit-shield]: https://img.shields.io/badge/lit-334eff?style=for-the-badge&logo=lit&logoColor=white
 [lit-url]: https://lit.dev/
+
+[cws-url]: https://chromewebstore.google.com/detail/enhancements-for-garmin-c/njkiagpmnaanjngcpopgpibcpfojmnja
+[faddon-url]: https://addons.mozilla.org/en-CA/firefox/addon/garmin-connect-enhancements/
