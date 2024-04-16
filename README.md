@@ -87,7 +87,7 @@ Favorite the exercises you frequently use to access them effortlessly later.
 
 [license-shield]: https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge
 [license-url]: LICENSE
-[build-shield]: https://img.shields.io/github/actions/workflow/status/Wassup789/garmin-connect-enhancements/build.yml?style=for-the-badge
+[build-shield]: https://img.shields.io/github/actions/workflow/status/Wassup789/garmin-connect-enhancements/build.yml?branch=main&style=for-the-badge
 [build-url]: https://github.com/Wassup789/garmin-connect-enhancements/actions/workflows/build.yml
 [lit-shield]: https://img.shields.io/badge/lit-334eff?style=for-the-badge&logo=lit&logoColor=white
 [lit-url]: https://lit.dev/
