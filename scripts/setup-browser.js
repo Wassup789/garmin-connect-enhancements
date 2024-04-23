@@ -8,27 +8,79 @@ const filePath = "./build/app.js",
     outDir = "./dist/browser",
     outPath = `${outDir}/app.js`;
 
-const filesToCopy = [
-    ["./build/app.js", path.join(outDir, "app.js")],
-    ["./build/browser-inject.js", path.join(outDir, "content-script.js")],
-    ["./assets/logo-16.png", path.join(outDir, "logo-16.png")],
-    ["./assets/logo-32.png", path.join(outDir, "logo-32.png")],
-    ["./assets/logo-48.png", path.join(outDir, "logo-48.png")],
-    ["./assets/logo-128.png", path.join(outDir, "logo-128.png")],
+/**
+ * @type {[string, string][]}
+ */
+const baseFilesToCopy = [
+    ["./build/app.js", "app.js"],
+    ["./build/browser-inject.js", "content-script.js"],
+    ["./assets/logo-16.png", "logo-16.png"],
+    ["./assets/logo-32.png", "logo-32.png"],
+    ["./assets/logo-48.png", "logo-48.png"],
+    ["./assets/logo-128.png", "logo-128.png"],
 ];
 
-async function run() {
-    const manifestContent = (await fs.readFile("./templates/browser/manifest.json", "utf8"))
-        .replace("[VERSION]", JSON.stringify(version))
-        .replace("[DESCRIPTION]", JSON.stringify(description));
-    await fs.mkdir(outDir, { recursive: true });
+/**
+ * @param {string} directory
+ */
+async function createEmptyDirectory(directory) {
+    await fs.mkdir(directory, { recursive: true });
 
-    await fs.writeFile(path.join(outDir, "manifest.json"), manifestContent, "utf-8");
+    for (const existingFile of await fs.readdir(directory)) {
+        await fs.unlink(path.join(directory, existingFile));
+    }
+}
 
+/**
+ * @param {"chrome"|"gecko"} target
+ * @param {string} targetDir
+ * @param {string} rawManifest
+ */
+async function writeManifestForTarget(target, targetDir, rawManifest) {
+    const manifestData = JSON.parse(rawManifest);
+
+    manifestData["version"] = version;
+    manifestData["description"] = description;
+
+    if (target === "chrome") {
+        delete manifestData["browser_specific_settings"];
+    }
+
+    await fs.writeFile(path.join(targetDir, "manifest.json"), JSON.stringify(manifestData, null, 2), "utf-8");
+}
+
+/**
+ * @param {string} targetDir
+ */
+async function copyFilesToDirectory(targetDir) {
+    const filesToCopy = baseFilesToCopy.map((e) => [e[0], path.join(targetDir, e[1])]);
     for (const [source, output] of filesToCopy) {
         await fs.writeFile(output, await fs.readFile(source));
     }
+}
 
+/**
+ * @param {"chrome"|"gecko"} target
+ * @param {string} rawManifest
+ */
+async function packageForTarget(target, rawManifest) {
+    const baseDir = path.join(outDir, target);
+
+    await createEmptyDirectory(baseDir);
+    await writeManifestForTarget(target, baseDir, rawManifest);
+    await copyFilesToDirectory(baseDir);
+}
+
+async function run() {
+    const rawManifest = await fs.readFile("./templates/browser/manifest.json", "utf8");
+
+    console.log("Packaging for chrome...");
+    await packageForTarget("chrome", rawManifest);
+
+    console.log("Packaging for gecko...");
+    await packageForTarget("gecko", rawManifest);
+
+    console.log();
     console.log(`Browser extension contents updated at ${outDir}`);
 }
 
