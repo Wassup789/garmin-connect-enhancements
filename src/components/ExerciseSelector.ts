@@ -58,6 +58,7 @@ export default class ExerciseSelector extends LitElement {
     readonly parentSelectElem: HTMLSelectElement;
     readonly suggestedGroup: ExerciseGroup;
 
+    readonly fromWorkoutEditor: boolean;
     readonly type: string;
 
     readonly popupInstance: ExerciseSelectorPopup;
@@ -71,6 +72,7 @@ export default class ExerciseSelector extends LitElement {
     constructor(readonly parentElem: HTMLElement) {
         super();
 
+        this.fromWorkoutEditor = parentElem.matches(".workout-step-exercises");
         this.parentSelectElem = parentElem.querySelector("select.chosen-select")!;
         this.suggestedGroup = this.generateSuggestedGroup();
         this.type = ExerciseSelector.getType(this);

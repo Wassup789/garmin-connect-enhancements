@@ -2,7 +2,7 @@ import { takeoverExerciseContainer } from "./enhancements/ExerciseSelectorEnhanc
 import { monitorWeightContainer } from "./enhancements/ExerciseSetWeightEnhancement";
 import { OnObserverDestroyFunct } from "./models/OnObserverDestroyFunct";
 
-const CHOSEN_PARENT_CONTAINER_SELECTOR = ".workout-name",
+const CHOSEN_PARENT_CONTAINER_SELECTOR = ".workout-name, .workout-step-exercises",
     WEIGHT_CONTAINER_SELECTOR = ".input-append.weight-entry",
     CONTAINER_MAPPINGS: ReadonlyArray<[string, (parent: HTMLElement) => void]> = [
         [CHOSEN_PARENT_CONTAINER_SELECTOR, addExerciseContainersFromParent],

@@ -10,6 +10,7 @@ import { customElement, property, query } from "lit/decorators.js";
 import SearchHelper, { SubstringRange } from "../helpers/SearchHelper";
 import ExerciseSelector from "./ExerciseSelector";
 import { ApplyMode } from "./ExerciseSelectorFilterApplies";
+import { styleMap } from "lit/directives/style-map.js";
 
 @customElement(ExerciseSelectorPopup.NAME)
 export default class ExerciseSelectorPopup extends LitElement {
@@ -40,7 +41,7 @@ export default class ExerciseSelectorPopup extends LitElement {
         :host {
             position: absolute;
             width: 100%;
-            z-index: 1;
+            z-index: 10;
             top: 0;
             left: 0;
         }
@@ -176,7 +177,9 @@ export default class ExerciseSelectorPopup extends LitElement {
                     <div class="empty-state" ?active=${this.optionsEmpty}>No exercises found</div>
                 </div>
                 <div class="filters-container">
-                    <exercise-selector-filter-applies @on-input=${(evt: CustomEvent<ApplyMode>) => this.applyMode = evt.detail}></exercise-selector-filter-applies>
+                    <exercise-selector-filter-applies
+                            style=${styleMap({ display: this.host && !this.host.fromWorkoutEditor ? "" : "none" })}
+                            @on-input=${(evt: CustomEvent<ApplyMode>) => this.applyMode = evt.detail}></exercise-selector-filter-applies>
                     <exercise-selector-filter-preview
                             .overlayTitle=${this.selectedOption?.text || ""}
                             .muscleMap=${this.selectedOption?.getExerciseMuscleMap() || null}></exercise-selector-filter-preview>
