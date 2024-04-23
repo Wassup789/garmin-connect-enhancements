@@ -38,5 +38,6 @@ jobs:
           token: ${{ secrets.PAT }}
           fail_on_unmatched_files: true
           files: |
-            dist/browser/browser.zip
+            dist/browser/garmin-connect-enhancements.unpackaged.chrome.zip
+            dist/browser/garmin-connect-enhancements.unpackaged.gecko.zip
             dist/userscript/garmin-connect-enhancements.user.js

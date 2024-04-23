@@ -22,11 +22,17 @@ jobs:
       - run: corepack enable
       - run: yarn install
       - run: yarn run prod
-      - run: zip -r dist/browser/browser.zip dist/browser/*
+      - name: Package for Chrome
+        working-directory: dist/browser/chrome
+        run: zip -r ../garmin-connect-enhancements.unpackaged.chrome.zip *
+      - name: Package for Firefox / Gecko
+        working-directory: dist/browser/gecko
+        run: zip -r ../garmin-connect-enhancements.unpackaged.gecko.zip *
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist
           path: |
-            dist/browser/browser.zip
+            dist/browser/garmin-connect-enhancements.unpackaged.chrome.zip
+            dist/browser/garmin-connect-enhancements.unpackaged.gecko.zip
             dist/userscript/garmin-connect-enhancements.user.js

@@ -24,7 +24,9 @@ Run `yarn run build:prod`
 ## Build and distributable directories breakdown
 * `build/` _(contains the raw build files)_
 * `dist/`
-  * `browser/` _(contains the browser extension distributables)_
+  * `browser/`
+    * `chrome/` _(contains the Chrome extension files)_
+    * `gecko/` _(contains the Firefox add-on files)_
   * `userscript/` _(contains the UserScript distributable)_
 
 ## Build & Watch For Changes
