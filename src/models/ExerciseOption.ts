@@ -15,6 +15,8 @@ export default class ExerciseOption {
     readonly text: string;
     readonly textCleaned: string;
 
+    favorited: boolean;
+
     elem!: ExerciseSelectorOption;
     readonly optionElem: HTMLOptionElement;
 
@@ -54,6 +56,7 @@ export default class ExerciseOption {
         this.textCleaned = SearchHelper.clean(this.text);
         this.optionElem = optionElem;
         this.suggested = optionElem.parentElement!.matches("[label='Suggested']");
+        this.favorited = FavoritesService.INSTANCE.hasFavorite(this.categoryValue, this.value);
     }
 
     updateFilterVisibility(activeMuscleGroupFilters: ReadonlySet<MuscleGroupFilter>, bodyweightFilter: boolean | null, hasFavoritesFilter: boolean) {
@@ -65,7 +68,7 @@ export default class ExerciseOption {
             return setFilterVisibility(true);
         }
 
-        if (hasFavoritesFilter && !FavoritesService.INSTANCE.hasFavorite(this.categoryValue, this.value)) {
+        if (hasFavoritesFilter && !this.favorited) {
             return setFilterVisibility(false);
         }
 

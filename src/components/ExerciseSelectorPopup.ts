@@ -12,6 +12,8 @@ import ExerciseSelector from "./ExerciseSelector";
 import { ApplyMode } from "./ExerciseSelectorFilterApplies";
 import { styleMap } from "lit/directives/style-map.js";
 
+type BestOptionDetails = { option: ExerciseOption | null; startsWith: boolean; rank: number };
+
 @customElement(ExerciseSelectorPopup.NAME)
 export default class ExerciseSelectorPopup extends LitElement {
     static readonly NAME = "exercise-selector-popup";
@@ -261,6 +263,8 @@ export default class ExerciseSelectorPopup extends LitElement {
         this.onUserSelectOption(event.detail.option, event.detail.metaKey ? "*" : undefined);
     };
     private onOptionFavoriteUpdate = (event: ExerciseSelectorOptionFavoriteUpdateEvent) => {
+        event.detail.option.favorited = event.detail.isFavorited;
+
         this.updateFilterVisibilityForOption(event.detail.option);
     };
 
@@ -364,7 +368,8 @@ export default class ExerciseSelectorPopup extends LitElement {
             return;
         }
 
-        const bestOptionDetails: { option: ExerciseOption | null; startsWith: boolean; rank: number } = { option: null, startsWith: false, rank: 0 };
+        const bestOptionDetails: BestOptionDetails = { option: null, startsWith: false, rank: 0 },
+            bestFavoritedOptionDetails: BestOptionDetails = { option: null, startsWith: false, rank: 0 };
         let firstVisibleOption: ExerciseOption | null = null;
         const searchWords = value.split(/\s+/);
         for (const group of groups) {
@@ -394,6 +399,13 @@ export default class ExerciseSelectorPopup extends LitElement {
                             bestOptionDetails.startsWith = fullStartsWith;
                             bestOptionDetails.rank = relativeRank;
                         }
+
+                        const hasBetterFavoriteRank = relativeRank > bestFavoritedOptionDetails.rank;
+                        if (option.favorited && hasBetterFavoriteRank && optionStartsWith) {
+                            bestFavoritedOptionDetails.option = option;
+                            bestFavoritedOptionDetails.startsWith = fullStartsWith;
+                            bestFavoritedOptionDetails.rank = relativeRank;
+                        }
                     } else {
                         if (!matchesGroupName) {
                             visible = false;
@@ -421,8 +433,11 @@ export default class ExerciseSelectorPopup extends LitElement {
         (async () => {
             await this.requestUpdate();
 
-            if (bestOptionDetails.option) {
+            // Select this best option unless a favorite option exists while the best option does not start with the query
+            if (bestOptionDetails.option && (!bestFavoritedOptionDetails.option || (bestOptionDetails.startsWith && !bestFavoritedOptionDetails.startsWith))) {
                 this.setSelectedOption(bestOptionDetails.option);
+            } else if (bestFavoritedOptionDetails.option) {
+                this.setSelectedOption(bestFavoritedOptionDetails.option);
             } else if (firstVisibleOption) {
                 this.setSelectedOption(firstVisibleOption);
             } else {
