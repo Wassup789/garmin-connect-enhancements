@@ -1,7 +1,7 @@
 <h1 align="center">Enhancements for Garmin Connect</h1>
 <div align="center">
 <picture>
-    <img width="128" src="assets/logo-128.png"/>
+    <img width="128" src="assets/logo-512.png"/>
 </picture>
 <br>
 <br>
