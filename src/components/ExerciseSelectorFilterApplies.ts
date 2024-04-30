@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
+import Helper from "../helpers/Helper";
 
 export type ApplyMode = "single" | "*" | "-0" | "0" | "1" | "2" | "3" | "4" | "5";
 
@@ -53,11 +54,12 @@ export default class ExerciseSelectorFilterApplies extends LitElement {
             <exercise-selector-filter-group id="apply" name="Apply to..." togglable active>
                 <div class="container">
                     ${ExerciseSelectorFilterApplies.INPUT_GROUPS.map((e) => html`
-                        <input 
+                        <input
                                 type="radio"
                                 name="apply-to"
                                 value=${e.value}
                                 id=${e.id}
+                                @focus=${Helper.inputUnfocusHandler}
                                 ?checked=${e.checked}
                                 @input=${() => this.onInput(e.value)}>
                         <label for=${e.id}>

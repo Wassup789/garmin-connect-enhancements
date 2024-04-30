@@ -58,15 +58,28 @@ export default class MuscleGroupFilter extends LitElement {
     protected render(): unknown {
         return html`
             <div class="input-container">
-                <input type="checkbox" id=${this.muscleGroup} @input=${() => this.onInput()}>
+                <input
+                        type="checkbox"
+                        id=${this.muscleGroup}
+                        @focus=${Helper.inputUnfocusHandler}
+                        @input=${() => this.onInput()}>
                 <label for=${this.muscleGroup}>${Helper.toTitleCase(this.muscleGroup)}</label>
                 <div class="flex-grow"></div>
                 <div class="exclude-button" @click=${() => this.exclude()}>Exclude</div>
             </div>
             <div class="refined-container">
-                <input type="checkbox" id="${this.muscleGroup}-primary" @input=${() => this.onRefinedInput()}>
+                <input
+                        type="checkbox"
+                        id="${this.muscleGroup}-primary"
+                        @focus=${Helper.inputUnfocusHandler}
+                        @input=${() => this.onRefinedInput()}>
                 <label for="${this.muscleGroup}-primary">Primary Muscle</label>
-                <input type="checkbox" id="${this.muscleGroup}-secondary" @input=${() => this.onRefinedInput()}>
+                
+                <input
+                        type="checkbox"
+                        id="${this.muscleGroup}-secondary"
+                        @focus=${Helper.inputUnfocusHandler}
+                        @input=${() => this.onRefinedInput()}>
                 <label for="${this.muscleGroup}-secondary">Secondary Muscle</label>
             </div>
         `;

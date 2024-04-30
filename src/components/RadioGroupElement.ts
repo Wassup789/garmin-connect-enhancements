@@ -2,6 +2,7 @@ import { customElement, property } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
 import { RadioGroup } from "../models/RadioGroup";
 import { RadioGroupValue } from "../models/RadioGroupValue";
+import Helper from "../helpers/Helper";
 
 @customElement(RadioGroupElement.NAME)
 export default class RadioGroupElement<T> extends LitElement {
@@ -26,6 +27,7 @@ export default class RadioGroupElement<T> extends LitElement {
                         name=${this.radioGroup!.name}
                         id=${this.getRadioValueId(e)}
                         ?checked=${e.checked}
+                        @focus=${Helper.inputUnfocusHandler}
                         @input=${() => this.onInput(e)}>
                 <label for=${this.getRadioValueId(e)}>${e.label}</label>
             `)}
