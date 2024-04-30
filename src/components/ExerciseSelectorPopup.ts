@@ -7,7 +7,7 @@ import ExerciseSelectorOption, {
 import MuscleGroupFilter from "./MuscleGroupFilter";
 import { css, html, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import SearchHelper, { SubstringRange } from "../helpers/SearchHelper";
+import SearchHelper from "../helpers/SearchHelper";
 import ExerciseSelector from "./ExerciseSelector";
 import { ApplyMode } from "./ExerciseSelectorFilterApplies";
 import { styleMap } from "lit/directives/style-map.js";
@@ -70,6 +70,7 @@ export default class ExerciseSelectorPopup extends LitElement {
         .options-container {
             position: absolute;
             width: var(--width);
+            min-width: var(--min-popup-width);
             height: 17rem;
             overflow: auto;
             background: #FFFFFF;
@@ -110,7 +111,7 @@ export default class ExerciseSelectorPopup extends LitElement {
         .filters-container {
             position: absolute;
             width: 275px;
-            left: calc(100% - 2px);
+            left: calc(max(var(--width), var(--min-popup-width)) - 2px);
             background: #fff;
             border-top-left-radius: 0;
             z-index: 1;

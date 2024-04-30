@@ -18,6 +18,7 @@ export default class ExerciseSelector extends LitElement {
         :host {
             position: relative;
             --width: 100%;
+            --min-popup-width: 15rem;
             --link-color: #1976d2;
         }
 
