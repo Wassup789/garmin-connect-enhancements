@@ -15,7 +15,8 @@
     "watch:add-userscript-header": "nodemon --watch ./build/* --exec \"yarn run package:add-userscript-header\"",
     "watch:setup-browser": "nodemon --watch ./build/* --exec \"yarn run package:setup-browser\"",
     "dev": "concurrently \"yarn run watch:build\" \"npm run watch:add-userscript-header\" \"npm run watch:setup-browser\"",
-    "prod": "yarn run build:prod && yarn run package:add-userscript-header && yarn run package:setup-browser"
+    "prod": "yarn run build:prod && yarn run package:add-userscript-header && yarn run package:setup-browser",
+    "lint": "yarn eslint ."
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
