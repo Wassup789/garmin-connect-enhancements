@@ -11,6 +11,7 @@ import SearchHelper from "../helpers/SearchHelper";
 import ExerciseSelector from "./ExerciseSelector";
 import { ApplyMode } from "./ExerciseSelectorFilterApplies";
 import { styleMap } from "lit/directives/style-map.js";
+import HistoryService, { HistoryData } from "../services/HistoryService";
 
 type BestOptionDetails = { option: ExerciseOption | null; startsWith: boolean; rank: number };
 
@@ -481,6 +482,7 @@ export default class ExerciseSelectorPopup extends LitElement {
         if (!this.host) {
             return;
         }
+        const historyDatas: HistoryData[] = [HistoryService.generateHistoryData(this.host, option)];
 
         if (applyMode === "*") {
             for (const exerciseSelector of ExerciseSelector.INSTANCES) {
@@ -488,6 +490,7 @@ export default class ExerciseSelectorPopup extends LitElement {
                     continue;
                 }
 
+                historyDatas.push(HistoryService.generateHistoryData(exerciseSelector, option));
                 exerciseSelector.onSelectOption(option);
             }
         } else if (applyMode !== "single") {
@@ -503,11 +506,13 @@ export default class ExerciseSelectorPopup extends LitElement {
 
                 let exerciseSelector: ExerciseSelector;
                 if (i == 0 && current instanceof HTMLElement && (exerciseSelector = current.querySelector(ExerciseSelector.NAME) as ExerciseSelector) && exerciseSelector.popupInstance === this) {
+                    historyDatas.push(HistoryService.generateHistoryData(exerciseSelector, option));
                     exerciseSelector.onSelectOption(option);
                 }
             }
         }
 
+        HistoryService.INSTANCE.setHistory(historyDatas);
         this.onSelectOption(option);
     }
 

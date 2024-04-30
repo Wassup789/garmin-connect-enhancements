@@ -10,6 +10,8 @@ export default class ExerciseSelector extends LitElement {
 
     static readonly INSTANCES: Set<ExerciseSelector> = new Set();
 
+    static readonly EVENT_ON_DISCONNECT = "on-disconnect";
+
     static styles = css`
         * {
             box-sizing: border-box;
@@ -149,6 +151,7 @@ export default class ExerciseSelector extends LitElement {
         super.disconnectedCallback();
 
         this.disconnectErrorListener?.();
+        this.dispatchEvent(new CustomEvent(ExerciseSelector.EVENT_ON_DISCONNECT));
 
         ExerciseSelector.INSTANCES.delete(this);
     }
@@ -165,11 +168,11 @@ export default class ExerciseSelector extends LitElement {
 
     }
 
-    onSelectOption(option: ExerciseOption) {
-        const optionElem = option.findOptionFromSelectElement(this.parentSelectElem);
+    onSelectOption(option: ExerciseOption | null) {
+        const optionElemIndex = !option ? -1 : option.findOptionFromSelectElement(this.parentSelectElem)?.index;
 
-        if (optionElem) {
-            this.parentSelectElem.selectedIndex = optionElem.index;
+        if (optionElemIndex !== undefined) {
+            this.parentSelectElem.selectedIndex = optionElemIndex;
             this.parentSelectElem.dispatchEvent(new Event("change"));
 
             this.savedOption = option;
