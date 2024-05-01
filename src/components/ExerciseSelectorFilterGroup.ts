@@ -1,11 +1,12 @@
 import { customElement, property } from "lit/decorators.js";
 import { css, LitElement, html, PropertyValues } from "lit";
 import StorageService from "../services/StorageService";
+import { TypedLitElement } from "../models/TypedEventTarget";
 
 type FilterGroupStorageData = Record<string, boolean>;
 
 @customElement(ExerciseSelectorFilterGroup.NAME)
-export default class ExerciseSelectorFilterGroup extends LitElement {
+export default class ExerciseSelectorFilterGroup extends (LitElement as TypedLitElement<ExerciseSelectorFilterGroup, ExerciseSelectorFilterGroupEventMap>) {
     static readonly NAME = "exercise-selector-filter-group";
 
     private static readonly STORAGE_DATA_KEY = "filter-group-data";
@@ -225,4 +226,8 @@ export default class ExerciseSelectorFilterGroup extends LitElement {
 
         event.stopPropagation();
     }
+}
+
+interface ExerciseSelectorFilterGroupEventMap {
+    [ExerciseSelectorFilterGroup.EVENT_RESET]: Event;
 }

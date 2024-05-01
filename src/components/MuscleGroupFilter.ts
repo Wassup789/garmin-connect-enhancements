@@ -2,9 +2,10 @@ import { customElement, property, query } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
 import { MuscleGroupFilterValue } from "../models/MuscleGroupFilterValue";
 import Helper from "../helpers/Helper";
+import { TypedLitElement } from "../models/TypedEventTarget";
 
 @customElement(MuscleGroupFilter.NAME)
-export default class MuscleGroupFilter extends LitElement {
+export default class MuscleGroupFilter extends (LitElement as TypedLitElement<MuscleGroupFilter, MuscleGroupFilterEventMap>) {
     static readonly NAME = "muscle-group-filter";
 
     static readonly EVENT_ON_ACTIVE = "on-active";
@@ -127,4 +128,10 @@ export default class MuscleGroupFilter extends LitElement {
         this.secondaryInput.checked = false;
         this.onRefinedInput(skipUpdate);
     }
+}
+
+interface MuscleGroupFilterEventMap {
+    [MuscleGroupFilter.EVENT_ON_ACTIVE]: CustomEvent<MuscleGroupFilter>;
+    [MuscleGroupFilter.EVENT_ON_INACTIVE]: CustomEvent<MuscleGroupFilter>;
+    [MuscleGroupFilter.EVENT_ON_UPDATE]: CustomEvent<MuscleGroupFilter>;
 }

@@ -3,9 +3,10 @@ import { css, html, LitElement } from "lit";
 import ExerciseOption from "../models/ExerciseOption";
 import ExerciseSelectorPopup from "./ExerciseSelectorPopup";
 import ExerciseGroup from "../models/ExerciseGroup";
+import { TypedLitElement } from "../models/TypedEventTarget";
 
 @customElement(ExerciseSelector.NAME)
-export default class ExerciseSelector extends LitElement {
+export default class ExerciseSelector extends (LitElement as TypedLitElement<ExerciseSelector, ExerciseSelectorEventMap>) {
     static readonly NAME = "exercise-selector";
 
     static readonly INSTANCES: Set<ExerciseSelector> = new Set();
@@ -180,4 +181,8 @@ export default class ExerciseSelector extends LitElement {
             console.warn("Failed to find the option element for", option);
         }
     }
+}
+
+interface ExerciseSelectorEventMap {
+    [ExerciseSelector.EVENT_ON_DISCONNECT]: CustomEvent;
 }

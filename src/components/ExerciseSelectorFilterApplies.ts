@@ -1,11 +1,16 @@
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 import Helper from "../helpers/Helper";
+import ExerciseSelectorOption, {
+    ExerciseSelectorOptionEvent, ExerciseSelectorOptionFavoriteUpdateEvent,
+    ExerciseSelectorOptionSelectEvent
+} from "./ExerciseSelectorOption";
+import { TypedLitElement } from "../models/TypedEventTarget";
 
 export type ApplyMode = "single" | "*" | "-0" | "0" | "1" | "2" | "3" | "4" | "5";
 
 @customElement(ExerciseSelectorFilterApplies.NAME)
-export default class ExerciseSelectorFilterApplies extends LitElement {
+export default class ExerciseSelectorFilterApplies extends (LitElement as TypedLitElement<ExerciseSelectorFilterApplies, ExerciseSelectorFilterAppliesEventMap>) {
     static readonly NAME = "exercise-selector-filter-applies";
 
     static readonly EVENT_INPUT = "on-input";
@@ -90,4 +95,10 @@ export default class ExerciseSelectorFilterApplies extends LitElement {
             }
         }
     }
+}
+
+interface ExerciseSelectorFilterAppliesEventMap {
+    [ExerciseSelectorOption.EVENT_MOUSE_OVER]: ExerciseSelectorOptionEvent;
+    [ExerciseSelectorOption.EVENT_ON_SELECT]: ExerciseSelectorOptionSelectEvent;
+    [ExerciseSelectorOption.EVENT_ON_FAVORITE_UPDATE]: ExerciseSelectorOptionFavoriteUpdateEvent;
 }

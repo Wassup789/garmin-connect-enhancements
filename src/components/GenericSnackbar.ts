@@ -1,8 +1,9 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { TypedLitElement } from "../models/TypedEventTarget";
 
 @customElement(GenericSnackbar.NAME)
-export default class GenericSnackbar extends LitElement {
+export default class GenericSnackbar extends (LitElement as TypedLitElement<GenericSnackbar, GenericSnackbarEventMap>) {
     static readonly NAME = "generic-snackbar";
 
     private static readonly DISPLAY_DURATION = 0.2;
@@ -134,4 +135,8 @@ export default class GenericSnackbar extends LitElement {
 
         this.dispatchEvent(new CustomEvent(GenericSnackbar.EVENT_ACTION, { detail: this }));
     }
+}
+
+interface GenericSnackbarEventMap {
+    [GenericSnackbar.EVENT_ACTION]: CustomEvent<GenericSnackbar>;
 }

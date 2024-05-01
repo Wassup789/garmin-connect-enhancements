@@ -6,9 +6,10 @@ import {
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import MuscleGroupFilter from "./MuscleGroupFilter";
+import { TypedLitElement } from "../models/TypedEventTarget";
 
 @customElement(ExerciseSelectorFilterMuscleGroups.NAME)
-export default class ExerciseSelectorFilterMuscleGroups extends LitElement {
+export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as TypedLitElement<ExerciseSelectorFilterMuscleGroups, ExerciseSelectorFilterMuscleGroupsEventMap>) {
     static readonly NAME = "exercise-selector-filter-muscle-groups";
 
     static readonly EVENT_ACTIVE_FILTERS_UPDATE = "on-active-filters-update";
@@ -129,4 +130,8 @@ export default class ExerciseSelectorFilterMuscleGroups extends LitElement {
         });
         this.onActiveFiltersUpdate();
     }
+}
+
+interface ExerciseSelectorFilterMuscleGroupsEventMap {
+    [ExerciseSelectorFilterMuscleGroups.EVENT_ACTIVE_FILTERS_UPDATE]: Event;
 }

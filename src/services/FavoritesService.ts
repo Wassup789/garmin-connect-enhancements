@@ -1,6 +1,7 @@
 import StorageService from "./StorageService";
+import { TypedEventTarget } from "../models/TypedEventTarget";
 
-export default class FavoritesService extends EventTarget {
+export default class FavoritesService extends (EventTarget as TypedEventTarget<FavoritesService, FavoritesServiceEventMap>) {
     private static _instance: FavoritesService = null as unknown as never;
 
     static get INSTANCE(): FavoritesService {
@@ -73,15 +74,10 @@ export default class FavoritesService extends EventTarget {
 
         StorageService.INSTANCE.set(FavoritesService.STORAGE_KEY, out);
     }
-
-    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => never, options?: boolean | AddEventListenerOptions): void;
-    // @ts-expect-error overridden from EventTarget
-    addEventListener(type: "on-favorite-update", callback: OnFavoriteEventListener | null, options?: AddEventListenerOptions | boolean): void;
-    // @ts-expect-error see above
-    removeEventListener(type: "on-favorite-update", callback: OnFavoriteEventListener | null, options?: EventListenerOptions | boolean): void;
 }
 
 export type OnFavoriteEvent = CustomEvent<{ exerciseCategory: string; exercise: string; isFavorite: boolean }>;
-export interface OnFavoriteEventListener {
-    (evt: OnFavoriteEvent): void;
+
+interface FavoritesServiceEventMap {
+    [FavoritesService.EVENT_ON_FAVORITE_UPDATE]: OnFavoriteEvent;
 }

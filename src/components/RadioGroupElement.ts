@@ -3,9 +3,10 @@ import { css, html, LitElement } from "lit";
 import { RadioGroup } from "../models/RadioGroup";
 import { RadioGroupValue } from "../models/RadioGroupValue";
 import Helper from "../helpers/Helper";
+import { TypedLitElement } from "../models/TypedEventTarget";
 
 @customElement(RadioGroupElement.NAME)
-export default class RadioGroupElement<T> extends LitElement {
+export default class RadioGroupElement<T> extends (LitElement as TypedLitElement<RadioGroupElement<unknown>, RadioGroupElementEventMap<unknown>>) {
     static readonly NAME = "radio-group";
 
     static readonly EVENT_INPUT = "on-input";
@@ -59,4 +60,8 @@ export default class RadioGroupElement<T> extends LitElement {
     private onInput(value: RadioGroupValue<T>) {
         this.dispatchEvent(new CustomEvent(RadioGroupElement.EVENT_INPUT, { detail: value.value }));
     }
+}
+
+interface RadioGroupElementEventMap<T> {
+    [RadioGroupElement.EVENT_INPUT]: T;
 }

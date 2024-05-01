@@ -1,11 +1,12 @@
 import { customElement, property } from "lit/decorators.js";
 import { LitElement, html, css } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import FavoritesService, { OnFavoriteEvent, OnFavoriteEventListener } from "../services/FavoritesService";
+import FavoritesService, { OnFavoriteEvent } from "../services/FavoritesService";
 import ExerciseOption from "../models/ExerciseOption";
+import { TypedLitElement } from "../models/TypedEventTarget";
 
 @customElement(ExerciseSelectorOption.NAME)
-export default class ExerciseSelectorOption extends LitElement {
+export default class ExerciseSelectorOption extends (LitElement as TypedLitElement<ExerciseSelectorOption, ExerciseSelectorOptionEventMap>) {
     static readonly NAME = "exercise-selector-option";
 
     static readonly EVENT_MOUSE_OVER = "mouse-over";
@@ -104,7 +105,7 @@ export default class ExerciseSelectorOption extends LitElement {
         }
     }
 
-    private onFavoriteUpdate: OnFavoriteEventListener = (e: OnFavoriteEvent) => {
+    private onFavoriteUpdate = (e: OnFavoriteEvent) => {
         if (e.detail.exerciseCategory === this.option.categoryValue && e.detail.exercise === this.option.value) {
             this.favorited = e.detail.isFavorite;
 
@@ -119,25 +120,14 @@ export default class ExerciseSelectorOption extends LitElement {
         const favoritesService = FavoritesService.INSTANCE;
         favoritesService.updateFavorite(this.option.categoryValue, this.option.value, !favoritesService.hasFavorite(this.option.categoryValue, this.option.value));
     }
-
-    // @ts-expect-error overridden from EventTarget
-    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => never, options?: boolean | AddEventListenerOptions): void;
-    // @ts-expect-error see above
-    removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => never, options?: boolean | EventListenerOptions): void;
-    // @ts-expect-error see above
-    addEventListener(type: "mouse-over", callback: ((evt: ExerciseSelectorOptionEvent) => void) | null, options?: AddEventListenerOptions | boolean): void;
-    // @ts-expect-error see above
-    removeEventListener(type: "mouse-over", callback: ((evt: ExerciseSelectorOptionEvent) => void) | null, options?: EventListenerOptions | boolean): void;
-    // @ts-expect-error see above
-    addEventListener(type: "on-select", callback: ((evt: ExerciseSelectorOptionSelectEvent) => void) | null, options?: AddEventListenerOptions | boolean): void;
-    // @ts-expect-error see above
-    removeEventListener(type: "on-select", callback: ((evt: ExerciseSelectorOptionSelectEvent) => void) | null, options?: EventListenerOptions | boolean): void;
-    // @ts-expect-error see above
-    addEventListener(type: "on-favorite-update", callback: ((evt: ExerciseSelectorOptionFavoriteUpdateEvent) => void) | null, options?: AddEventListenerOptions | boolean): void;
-    // @ts-expect-error see above
-    removeEventListener(type: "on-favorite-update", callback: ((evt: ExerciseSelectorOptionFavoriteUpdateEvent) => void) | null, options?: EventListenerOptions | boolean): void;
 }
 
 export type ExerciseSelectorOptionEvent = CustomEvent<{ option: ExerciseOption }>;
 export type ExerciseSelectorOptionSelectEvent = ExerciseSelectorOptionEvent & CustomEvent<{ metaKey: boolean }>;
 export type ExerciseSelectorOptionFavoriteUpdateEvent = ExerciseSelectorOptionEvent & CustomEvent<{ isFavorited: boolean }>;
+
+interface ExerciseSelectorOptionEventMap {
+    [ExerciseSelectorOption.EVENT_MOUSE_OVER]: ExerciseSelectorOptionEvent;
+    [ExerciseSelectorOption.EVENT_ON_SELECT]: ExerciseSelectorOptionSelectEvent;
+    [ExerciseSelectorOption.EVENT_ON_FAVORITE_UPDATE]: ExerciseSelectorOptionFavoriteUpdateEvent;
+}

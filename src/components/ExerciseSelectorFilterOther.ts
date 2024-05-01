@@ -2,9 +2,10 @@ import { css, html, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { RadioGroup } from "../models/RadioGroup";
 import RadioGroupElement from "./RadioGroupElement";
+import { TypedLitElement } from "../models/TypedEventTarget";
 
 @customElement(ExerciseSelectorFilterOther.NAME)
-export default class ExerciseSelectorFilterOther extends LitElement {
+export default class ExerciseSelectorFilterOther extends (LitElement as TypedLitElement<ExerciseSelectorFilterOther, ExerciseSelectorFilterOtherEventMap>) {
     static readonly NAME = "exercise-selector-filter-other";
 
     static readonly EVENT_BODYWEIGHT_UPDATE = "on-bodyweight-update";
@@ -105,4 +106,9 @@ export default class ExerciseSelectorFilterOther extends LitElement {
         this.updateBodyweightValue(null);
         this.updateFavoritesValue(false);
     }
+}
+
+interface ExerciseSelectorFilterOtherEventMap {
+    [ExerciseSelectorFilterOther.EVENT_FAVORITES_UPDATE]: CustomEvent<boolean>;
+    [ExerciseSelectorFilterOther.EVENT_BODYWEIGHT_UPDATE]: CustomEvent<boolean | null>;
 }
