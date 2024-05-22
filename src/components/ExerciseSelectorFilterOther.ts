@@ -36,6 +36,7 @@ export default class ExerciseSelectorFilterOther extends (LitElement as TypedLit
         .filter-container, .favorites-container {
             display: grid;
             grid-template-columns: auto 1fr;
+            align-items: center;
         }
     `;
 

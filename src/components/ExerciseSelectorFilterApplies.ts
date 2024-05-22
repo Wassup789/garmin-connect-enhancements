@@ -6,6 +6,7 @@ import ExerciseSelectorOption, {
     ExerciseSelectorOptionSelectEvent
 } from "./ExerciseSelectorOption";
 import { TypedLitElement } from "../models/TypedEventTarget";
+import { RadioGroup } from "../models/RadioGroup";
 
 export type ApplyMode = "single" | "*" | "-0" | "0" | "1" | "2" | "3" | "4" | "5";
 
@@ -18,19 +19,23 @@ export default class ExerciseSelectorFilterApplies extends (LitElement as TypedL
     private static savedValue: ApplyMode | null = null;
 
     private static readonly EVERY_X_INPUT_GROUPS: [string, ApplyMode][] = [["other", "1"], ["third", "2"], ["fourth", "3"], ["fifth", "4"], ["sixth", "5"]];
-    private static readonly INPUT_GROUPS: { id: string; text: string; value: ApplyMode; checked?: boolean }[] = [
-        { id: "apply-to-single", text: "Apply to only this set", value: "single", checked: true },
-        { id: "apply-to-all", text: "Apply to all sets", value: "*" },
-        { id: "apply-to-all-before", text: "Apply to all sets, this and before", value: "-0" },
-        { id: "apply-to-all-after", text: "Apply to all sets, this and after", value: "0" },
-        ...ExerciseSelectorFilterApplies.EVERY_X_INPUT_GROUPS
-            .map((e) => { return { id: `apply-to-every-${e[0]}`, text: `Apply to every ${e[0]} set`, value: e[1] }; }),
-    ];
+    private static readonly INPUT_GROUPS: RadioGroup<string> = {
+        name: "applies",
+        values: [
+            { name: "single", value: "single", label: "Apply to only this set", checked: true },
+            { name: "all", value: "*", label: "Apply to all sets" },
+            { name: "before", value: "-0", label: "Apply to all sets, this and before" },
+            { name: "after", value: "0", label: "Apply to all sets, this and after" },
+            ...ExerciseSelectorFilterApplies.EVERY_X_INPUT_GROUPS
+                .map((e) => { return { name: `every-${e[0]}`, value: e[1], label: `Apply to every ${e[0]} set` }; }),
+        ],
+    };
 
     static styles = css`
         .container {
             display: grid;
             grid-template-columns: auto 1fr;
+            align-items: center;
         }
   `;
 
@@ -58,19 +63,10 @@ export default class ExerciseSelectorFilterApplies extends (LitElement as TypedL
         return html`
             <exercise-selector-filter-group id="apply" name="Apply to..." togglable active>
                 <div class="container">
-                    ${ExerciseSelectorFilterApplies.INPUT_GROUPS.map((e) => html`
-                        <input
-                                type="radio"
-                                name="apply-to"
-                                value=${e.value}
-                                id=${e.id}
-                                @focus=${Helper.inputUnfocusHandler}
-                                ?checked=${e.checked}
-                                @input=${() => this.onInput(e.value)}>
-                        <label for=${e.id}>
-                            ${e.text}
-                        </label>
-                    `)}
+                    <radio-group
+                            id="applies-radio-group" 
+                            .radioGroup=${ExerciseSelectorFilterApplies.INPUT_GROUPS} 
+                            @on-input=${(e: CustomEvent) => this.onInput(e.detail)}></radio-group>
                 </div>
             </exercise-selector-filter-group>
         `;
