@@ -9,3 +9,4 @@ export { default as MuscleGroupPreview } from "./MuscleGroupPreview";
 export { default as ExerciseSelectorFilterOther } from "./ExerciseSelectorFilterOther";
 export { default as RadioGroupElement } from "./RadioGroupElement";
 export { default as GenericSnackbar } from "./GenericSnackbar";
+export { default as CheckboxElement } from "./CheckboxElement";

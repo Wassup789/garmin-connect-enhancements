@@ -3,6 +3,7 @@ import { css, html, LitElement } from "lit";
 import { MuscleGroupFilterValue } from "../models/MuscleGroupFilterValue";
 import Helper from "../helpers/Helper";
 import { TypedLitElement } from "../models/TypedEventTarget";
+import CheckboxElement from "./CheckboxElement";
 
 @customElement(MuscleGroupFilter.NAME)
 export default class MuscleGroupFilter extends (LitElement as TypedLitElement<MuscleGroupFilter, MuscleGroupFilterEventMap>) {
@@ -52,36 +53,26 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
     @property({ reflect: true })
     active: boolean = false;
 
-    @query(".input-container input") input!: HTMLInputElement;
-    @query(".refined-container input:first-of-type") primaryInput!: HTMLInputElement;
-    @query(".refined-container input:last-of-type") secondaryInput!: HTMLInputElement;
+    @query(".input-container checkbox-elem") input!: CheckboxElement;
+    @query(".refined-container checkbox-elem:first-of-type") primaryInput!: CheckboxElement;
+    @query(".refined-container checkbox-elem:last-of-type") secondaryInput!: CheckboxElement;
 
     protected render(): unknown {
         return html`
             <div class="input-container">
-                <input
-                        type="checkbox"
-                        id=${this.muscleGroup}
-                        @focus=${Helper.inputUnfocusHandler}
-                        @input=${() => this.onInput()}>
-                <label for=${this.muscleGroup}>${Helper.toTitleCase(this.muscleGroup)}</label>
+                <checkbox-elem
+                        label=${Helper.toTitleCase(this.muscleGroup)} 
+                        @on-input=${() => this.onInput()}></checkbox-elem>
                 <div class="flex-grow"></div>
                 <div class="exclude-button" @click=${() => this.exclude()}>Exclude</div>
             </div>
             <div class="refined-container">
-                <input
-                        type="checkbox"
-                        id="${this.muscleGroup}-primary"
-                        @focus=${Helper.inputUnfocusHandler}
-                        @input=${() => this.onRefinedInput()}>
-                <label for="${this.muscleGroup}-primary">Primary Muscle</label>
-                
-                <input
-                        type="checkbox"
-                        id="${this.muscleGroup}-secondary"
-                        @focus=${Helper.inputUnfocusHandler}
-                        @input=${() => this.onRefinedInput()}>
-                <label for="${this.muscleGroup}-secondary">Secondary Muscle</label>
+                <checkbox-elem
+                        label="Primary Muscle"
+                        @on-input=${() => this.onRefinedInput()}></checkbox-elem>
+                <checkbox-elem
+                        label="Secondary Muscle"
+                        @on-input=${() => this.onRefinedInput()}></checkbox-elem>
             </div>
         `;
     }
