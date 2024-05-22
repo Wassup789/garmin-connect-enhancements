@@ -23,11 +23,6 @@ export default class HistoryService {
         return this._currentHistory;
     }
     private set currentHistory(value: ReadonlyArray<HistoryData>) {
-        const a = this._currentHistory[0].elem;
-        a.addEventListener("on-disconnect", (event) => {
-
-        });
-
         this._currentHistory.forEach((e) => e.elem.removeEventListener(ExerciseSelector.EVENT_ON_DISCONNECT, this.onHistoryElemDisconnect));
         this._currentHistory = value;
         this._currentHistory.forEach((e) => e.elem.addEventListener(ExerciseSelector.EVENT_ON_DISCONNECT, this.onHistoryElemDisconnect));
@@ -43,8 +38,9 @@ export default class HistoryService {
 
         const snackbarService = SnackbarService.INSTANCE;
         snackbarService.dismiss();
-        if (this.currentHistory.length > 1 && showSnackbar) {
-            snackbarService.show(`Updated ${this.currentHistory.length} sets`, HistoryService.SNACKBAR_DURATION, "Undo")
+
+        if (this.currentHistory.length > 0 && showSnackbar) {
+            snackbarService.show(`Updated ${this.currentHistory.length} set${this.currentHistory.length === 1 ? "" : "s"}`, HistoryService.SNACKBAR_DURATION, "Undo")
                 .addEventListener(GenericSnackbar.EVENT_ACTION, () => this.undo());
         }
     }
