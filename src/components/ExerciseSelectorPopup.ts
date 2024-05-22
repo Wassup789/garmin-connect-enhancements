@@ -43,15 +43,20 @@ export default class ExerciseSelectorPopup extends LitElement {
 
         :host {
             position: absolute;
-            width: 100%;
-            z-index: 10;
+            display: grid;
+            grid-template-columns: auto var(--filters-width);
             top: 0;
             left: 0;
+            z-index: 4;
+            width: calc(var(--input-width) + var(--filters-width));
+            
+            --input-width: var(--width, 100%);
+            --filters-width: 275px;
         }
 
         input[type='search'] {
             padding: 5px;
-            width: var(--width);
+            width: var(--input-width);
             border: 1px solid #aaaaaa;
             border-radius: 5px;
             user-select: none;
@@ -69,8 +74,8 @@ export default class ExerciseSelectorPopup extends LitElement {
             border-radius: 5px;
         }
         .options-container {
-            position: absolute;
-            width: var(--width);
+            position: relative;
+            width: var(--input-width);
             min-width: var(--min-popup-width);
             height: 17rem;
             overflow: auto;
@@ -79,6 +84,7 @@ export default class ExerciseSelectorPopup extends LitElement {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
+            grid-column: 1;
         }
 
         .option-separator {
@@ -107,15 +113,13 @@ export default class ExerciseSelectorPopup extends LitElement {
         }
 
         .popup-container {
-            position: relative;
+            display: contents;
         }
         .filters-container {
-            position: absolute;
-            width: 275px;
-            left: calc(max(var(--width), var(--min-popup-width)) - 2px);
+            width: var(--filters-width);
+            height: min-content;
             background: #fff;
             border-top-left-radius: 0;
-            z-index: 1;
         }
     `;
 
@@ -174,25 +178,23 @@ export default class ExerciseSelectorPopup extends LitElement {
                    @input=${() => this.onInput()}
                    @keydown=${(evt: KeyboardEvent) => this.onKeyDown(evt)}
                    @focus=${() => this.onFocus()}>
-            <div class="popup-container">
-                <div class="options-container">
-                    ${this.suggestedGroup ? groupOptionsMap(this.suggestedGroup) : ""}
-                    ${this.groups.map(groupOptionsMap)}
-                    <div class="empty-state" ?active=${this.optionsEmpty}>No exercises found</div>
-                </div>
-                <div class="filters-container">
-                    <exercise-selector-filter-applies
-                            style=${styleMap({ display: this.host && !this.host.fromWorkoutEditor ? "" : "none" })}
-                            @on-input=${(evt: CustomEvent<ApplyMode>) => this.applyMode = evt.detail}></exercise-selector-filter-applies>
-                    <exercise-selector-filter-preview
-                            .overlayTitle=${this.selectedOption?.text || ""}
-                            .muscleMap=${this.selectedOption?.getExerciseMuscleMap() || null}></exercise-selector-filter-preview>
-                    <exercise-selector-filter-muscle-groups 
-                            @on-active-filters-update=${() => this.updateOptionsFilterVisibility()}></exercise-selector-filter-muscle-groups>
-                    <exercise-selector-filter-other
-                            @on-bodyweight-update=${(evt: CustomEvent) => { this.bodyweightFilter = evt.detail; this.updateOptionsFilterVisibility(); }}
-                            @on-favorites-update=${(evt: CustomEvent) => { this.favoritesFilter = evt.detail; this.updateOptionsFilterVisibility(); }}></exercise-selector-filter-other>
-                </div>
+            <div class="options-container">
+                ${this.suggestedGroup ? groupOptionsMap(this.suggestedGroup) : ""}
+                ${this.groups.map(groupOptionsMap)}
+                <div class="empty-state" ?active=${this.optionsEmpty}>No exercises found</div>
+            </div>
+            <div class="filters-container">
+                <exercise-selector-filter-applies
+                        style=${styleMap({ display: this.host && !this.host.fromWorkoutEditor ? "" : "none" })}
+                        @on-input=${(evt: CustomEvent<ApplyMode>) => this.applyMode = evt.detail}></exercise-selector-filter-applies>
+                <exercise-selector-filter-preview
+                        .overlayTitle=${this.selectedOption?.text || ""}
+                        .muscleMap=${this.selectedOption?.getExerciseMuscleMap() || null}></exercise-selector-filter-preview>
+                <exercise-selector-filter-muscle-groups 
+                        @on-active-filters-update=${() => this.updateOptionsFilterVisibility()}></exercise-selector-filter-muscle-groups>
+                <exercise-selector-filter-other
+                        @on-bodyweight-update=${(evt: CustomEvent) => { this.bodyweightFilter = evt.detail; this.updateOptionsFilterVisibility(); }}
+                        @on-favorites-update=${(evt: CustomEvent) => { this.favoritesFilter = evt.detail; this.updateOptionsFilterVisibility(); }}></exercise-selector-filter-other>
             </div>
         `;
     }
