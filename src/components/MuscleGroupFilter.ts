@@ -12,6 +12,7 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
     static readonly EVENT_ON_ACTIVE = "on-active";
     static readonly EVENT_ON_INACTIVE = "on-inactive";
     static readonly EVENT_ON_UPDATE = "on-update";
+    static readonly EVENT_ON_PREVIEW_TOGGLE = "on-preview-toggle";
 
     static styles = css`
         .input-container {
@@ -39,6 +40,17 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
         .exclude-button:hover {
             text-decoration: underline;
         }
+
+        .preview {
+            margin-left: 0.25rem;
+            font-size: 0.85em;
+            cursor: pointer;
+            user-select: none;
+            color: var(--link-color);
+        }
+        .preview:hover {
+            text-decoration: underline;
+        }
     `;
 
     @property({ attribute: "value", reflect: true })
@@ -63,6 +75,10 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
                 <checkbox-elem
                         label=${Helper.toTitleCase(this.muscleGroup)} 
                         @on-input=${() => this.onInput()}></checkbox-elem>
+                <span
+                        class="preview" 
+                        @mouseover=${() => this.onPreviewToggle(true)} 
+                        @mouseout=${() => this.onPreviewToggle(false)}>?</span>
                 <div class="flex-grow"></div>
                 <div class="exclude-button" @click=${() => this.exclude()}>Exclude</div>
             </div>
@@ -119,10 +135,15 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
         this.secondaryInput.checked = false;
         this.onRefinedInput(skipUpdate);
     }
+
+    private onPreviewToggle(displayPreview: boolean) {
+        this.dispatchEvent(new CustomEvent(MuscleGroupFilter.EVENT_ON_PREVIEW_TOGGLE, { detail: { filter: this, displayPreview: displayPreview } }));
+    }
 }
 
 interface MuscleGroupFilterEventMap {
     [MuscleGroupFilter.EVENT_ON_ACTIVE]: CustomEvent<MuscleGroupFilter>;
     [MuscleGroupFilter.EVENT_ON_INACTIVE]: CustomEvent<MuscleGroupFilter>;
     [MuscleGroupFilter.EVENT_ON_UPDATE]: CustomEvent<MuscleGroupFilter>;
+    [MuscleGroupFilter.EVENT_ON_PREVIEW_TOGGLE]: CustomEvent<{ filter: MuscleGroupFilter; displayPreview: boolean }>;
 }

@@ -4,9 +4,11 @@ import {
     EXERCISE_MUSCLES
 } from "../interceptors/ExerciseResponseInterceptor";
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 import MuscleGroupFilter from "./MuscleGroupFilter";
 import { TypedLitElement } from "../models/TypedEventTarget";
+import { styleMap } from "lit/directives/style-map.js";
+import { classMap } from "lit/directives/class-map.js";
 
 @customElement(ExerciseSelectorFilterMuscleGroups.NAME)
 export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as TypedLitElement<ExerciseSelectorFilterMuscleGroups, ExerciseSelectorFilterMuscleGroupsEventMap>) {
@@ -15,6 +17,9 @@ export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as T
     static readonly EVENT_ACTIVE_FILTERS_UPDATE = "on-active-filters-update";
 
     static styles = css`
+        :host {
+            position: relative;
+        }
         .bodyweight-container {
             display: flex;
             flex-direction: row;
@@ -33,13 +38,43 @@ export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as T
         .button:hover {
             text-decoration: underline;
         }
+        
+        #muscle-group-preview-container {
+            position: relative;
+        }
+        #muscle-group-preview-container:not([active]) {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #muscle-group-preview-container muscle-group-preview {
+            position: absolute;
+            height: min-content;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: #FFFFFF;
+        }
+        #muscle-group-preview-container:not(.left) muscle-group-preview {
+            left: 100%;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        #muscle-group-preview-container.left muscle-group-preview {
+            right: 100%;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        #muscle-group-preview-container:not([active]) muscle-group-preview {
+            left: initial;
+            right: initial;
+        }
     `;
 
     private init: boolean = false;
 
     private initCallback = () => this.setupMuscleGroups();
 
-    @property()
+    @state()
     private _filters: MuscleGroupFilter[] = [];
     get filters(): ReadonlyArray<MuscleGroupFilter> {
         return this._filters;
@@ -50,13 +85,30 @@ export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as T
         return this._activeFilters;
     }
 
-    @property()
+    @state()
     private hasActiveFilters: boolean = false;
+
+    @state()
+    private previewVisibility: { muscleGroupSet: Set<string>; offsetTop: number; displayToLeft: boolean } | null = null;
+
+    @query("#muscle-group-preview-container") muscleGroupPreviewContainer!: HTMLDivElement;
 
     constructor() {
         super();
 
         this.setupMuscleGroups();
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+
+        window.addEventListener("resize", this.onWindowResize);
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+
+        window.removeEventListener("resize", this.onWindowResize);
     }
 
     private setupMuscleGroups() {
@@ -80,6 +132,14 @@ export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as T
                 this.onActiveFiltersUpdate();
             });
             filter.addEventListener(MuscleGroupFilter.EVENT_ON_UPDATE, () => this.dispatchEvent(new Event(ExerciseSelectorFilterMuscleGroups.EVENT_ACTIVE_FILTERS_UPDATE)));
+            filter.addEventListener(MuscleGroupFilter.EVENT_ON_PREVIEW_TOGGLE, (e) => {
+                if (e.detail.displayPreview) {
+                    this.previewVisibility = { offsetTop: e.detail.filter.offsetTop, muscleGroupSet: new Set([e.detail.filter.muscleGroup]), displayToLeft: false };
+                    this.calculatePreviewPosition();
+                } else {
+                    this.previewVisibility = null;
+                }
+            });
 
             return filter;
         }));
@@ -87,6 +147,22 @@ export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as T
         this.requestUpdate();
 
         this.init = true;
+    }
+
+    private onWindowResize = () => {
+        this.calculatePreviewPosition();
+    };
+
+    private calculatePreviewPosition() {
+        if (this.previewVisibility) {
+            const rightBound = this.getBoundingClientRect().right + this.muscleGroupPreviewContainer.getBoundingClientRect().width,
+                displayToLeft = rightBound > window.innerWidth;
+
+            if (displayToLeft != this.previewVisibility.displayToLeft) {
+                this.previewVisibility.displayToLeft = displayToLeft;
+                this.requestUpdate();
+            }
+        }
     }
 
     private onActiveFiltersUpdate() {
@@ -99,6 +175,14 @@ export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as T
         }
 
         return html`
+            <div
+                    id="muscle-group-preview-container" 
+                    ?active=${this.previewVisibility}
+                    class=${classMap({ left: this.previewVisibility?.displayToLeft || false })}>
+                <muscle-group-preview
+                        style=${styleMap({ top: this.previewVisibility ? `${this.previewVisibility.offsetTop}px` : null })}
+                        .primaryMuscleGroups=${this.previewVisibility?.muscleGroupSet || new Set()}></muscle-group-preview>
+            </div>
             <exercise-selector-filter-group
                     id="muscle-group"
                     name="Filter by Muscle Group"
