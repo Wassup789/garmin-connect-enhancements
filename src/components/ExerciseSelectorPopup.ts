@@ -52,13 +52,14 @@ export default class ExerciseSelectorPopup extends LitElement {
             
             --input-width: var(--width, 100%);
             --filters-width: 275px;
+            --border-color: #d5d5d5;
         }
 
         input[type='search'] {
             padding: 5px;
             width: var(--input-width);
             border: 1px solid #aaaaaa;
-            border-radius: 5px;
+            border-radius: var(--border-radius);
             user-select: none;
             box-sizing: border-box;
         }
@@ -70,8 +71,8 @@ export default class ExerciseSelectorPopup extends LitElement {
         }
 
         .options-container, .filters-container {
-            border: 1px solid #d5d5d5;
-            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
         }
         .options-container {
             position: relative;

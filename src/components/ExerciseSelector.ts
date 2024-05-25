@@ -23,6 +23,7 @@ export default class ExerciseSelector extends (LitElement as TypedLitElement<Exe
             --width: 100%;
             --min-popup-width: 15rem;
             --link-color: #1976d2;
+            --border-radius: 5px;
         }
 
         :host(:not([active])) :is(.options-container, .filters-container, input),
@@ -34,7 +35,7 @@ export default class ExerciseSelector extends (LitElement as TypedLitElement<Exe
             padding: 5px 25px 5px 5px;
             width: var(--width);
             border: 1px solid #aaaaaa;
-            border-radius: 5px;
+            border-radius: var(--border-radius);
             user-select: none;
             box-sizing: border-box;
             position: relative;
