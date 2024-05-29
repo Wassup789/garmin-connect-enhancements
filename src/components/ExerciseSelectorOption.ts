@@ -46,8 +46,14 @@ export default class ExerciseSelectorOption extends (LitElement as TypedLitEleme
 
     private readonly option: ExerciseOption;
 
-    @property({ type: String, attribute: "data-value", reflect: true })
-    value: string;
+    @property({ attribute: "data-label", reflect: true })
+    readonly label: string;
+
+    @property({ attribute: "data-category-value", reflect: true })
+    readonly categoryValue: string;
+
+    @property({ attribute: "data-value", reflect: true })
+    readonly rawValue: string;
 
     @property()
     underlinedValue: string | null = null;
@@ -67,12 +73,15 @@ export default class ExerciseSelectorOption extends (LitElement as TypedLitEleme
         const favoritesService = FavoritesService.INSTANCE;
         this.option = option;
 
-        this.value = option.text;
+        this.label = option.text;
+        this.categoryValue = option.categoryValue;
+        this.rawValue = option.value;
         this.favorited = favoritesService.hasFavorite(option.categoryValue, option.value);
 
         this.addEventListener("mouseover", () => this.dispatchEvent(new CustomEvent(ExerciseSelectorOption.EVENT_MOUSE_OVER, { detail: { option: this.option } })));
         this.addEventListener("click", (e) => this.onClick(e));
     }
+
     connectedCallback() {
         super.connectedCallback();
 
@@ -92,7 +101,7 @@ export default class ExerciseSelectorOption extends (LitElement as TypedLitEleme
         return html`
             <div class="container">
                 <span>
-                    ${unsafeHTML(this.underlinedValue || this.value)}
+                    ${unsafeHTML(this.underlinedValue || this.label)}
                 </span>
                 <div class="favorite" @click=${(event: MouseEvent) => this.onFavoriteToggle(event)}>${unsafeHTML(this.favorited ? "&#9733;" : "&#9734;")}</div>
             </div>

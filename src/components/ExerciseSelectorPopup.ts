@@ -6,7 +6,7 @@ import ExerciseSelectorOption, {
 } from "./ExerciseSelectorOption";
 import MuscleGroupFilter from "./MuscleGroupFilter";
 import { css, html, LitElement } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 import SearchHelper from "../helpers/SearchHelper";
 import ExerciseSelector from "./ExerciseSelector";
 import { ApplyMode } from "./ExerciseSelectorFilterApplies";
@@ -124,10 +124,17 @@ export default class ExerciseSelectorPopup extends LitElement {
         }
     `;
 
-    host: ExerciseSelector | null = null;
-    @property()
-    suggestedGroup: ExerciseGroup | null = null;
-    allOptions: ReadonlyArray<ExerciseOption> = [];
+    private host: ExerciseSelector | null = null;
+    @state()
+    private suggestedGroup: ExerciseGroup | null = null;
+
+    private _allOptions: ReadonlyArray<ExerciseOption> = [];
+    get allOptions(): ReadonlyArray<ExerciseOption> {
+        return this._allOptions;
+    }
+    private set allOptions(value: ReadonlyArray<ExerciseOption>) {
+        this._allOptions = value;
+    }
 
     readonly options: ReadonlyArray<ExerciseOption>;
     readonly groups: ReadonlyArray<ExerciseGroup> = [];
@@ -137,15 +144,15 @@ export default class ExerciseSelectorPopup extends LitElement {
         return this.filterMuscleGroups.activeFilters;
     }
 
-    applyMode: ApplyMode = "single";
-    bodyweightFilter: boolean | null = null;
-    favoritesFilter: boolean = false;
+    private applyMode: ApplyMode = "single";
+    private bodyweightFilter: boolean | null = null;
+    private favoritesFilter: boolean = false;
 
-    @property()
-    selectedOption: ExerciseOption | null = null;
+    @state()
+    private selectedOption: ExerciseOption | null = null;
 
-    @property()
-    optionsEmpty: boolean = false;
+    @state()
+    private optionsEmpty: boolean = false;
 
     @query(".pseudo-select") pseudoSelectElem!: HTMLDivElement;
     @query("input") inputElem!: HTMLInputElement;

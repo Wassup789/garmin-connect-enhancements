@@ -27,7 +27,7 @@ export default class CheckboxElement extends (LitElement as TypedLitElement<Chec
             margin-right: 4px;
             aspect-ratio: 1;
         }
-        .input-radio[active] {
+        :host([checked]) .input-radio {
             border-color: var(--link-color);
             background: var(--link-color);
         }
@@ -36,7 +36,7 @@ export default class CheckboxElement extends (LitElement as TypedLitElement<Chec
             transform: scale(1.2);
             fill: #FFFFFF;
         }
-        .input-radio:not([active]) svg {
+        :host(:not([checked])) .input-radio svg {
             display: none;
         }
     `;
@@ -44,15 +44,14 @@ export default class CheckboxElement extends (LitElement as TypedLitElement<Chec
     @property()
     label: string = "";
 
-    @property()
+    @property({ type: Boolean, reflect: true })
     checked: boolean = false;
 
     protected render(): unknown {
         return html`
             <div
                     class="input-radio"
-                    @click=${() => this.setValue(!this.checked)}
-                    ?active=${this.checked}>
+                    @click=${() => this.setValue(!this.checked)}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M389-227 154-461l91-92 144 145 327-326 91 90-418 417Z"/></svg>
             </div>
             <span

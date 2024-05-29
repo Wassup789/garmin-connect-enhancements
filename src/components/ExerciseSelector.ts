@@ -1,4 +1,4 @@
-import { customElement, property } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
 import ExerciseOption from "../models/ExerciseOption";
 import ExerciseSelectorPopup from "./ExerciseSelectorPopup";
@@ -68,8 +68,14 @@ export default class ExerciseSelector extends (LitElement as TypedLitElement<Exe
 
     readonly popupInstance: ExerciseSelectorPopup;
 
-    @property()
-    savedOption: ExerciseOption | null = null;
+    private _savedOption: ExerciseOption | null = null;
+    @state()
+    private set savedOption(value: ExerciseOption | null) {
+        this._savedOption = value;
+    }
+    get savedOption(): ExerciseOption | null {
+        return this._savedOption;
+    }
 
     connectErrorListener!: () => void;
     disconnectErrorListener!: () => void;

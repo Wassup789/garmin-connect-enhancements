@@ -1,4 +1,4 @@
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { css, html, LitElement, PropertyValues } from "lit";
 import { RadioGroup } from "../models/RadioGroup";
 import { RadioGroupValue } from "../models/RadioGroupValue";
@@ -39,8 +39,8 @@ export default class RadioGroupElement<T> extends (LitElement as TypedLitElement
     @property({ type: Object })
     radioGroup: RadioGroup<T> | null = null;
 
-    @property()
-    checkedRadioGroupValue: RadioGroupValue<T> | null = null;
+    @state()
+    private checkedRadioGroupValue: RadioGroupValue<T> | null = null;
 
     protected render(): unknown {
         return this.radioGroup ? html`

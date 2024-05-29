@@ -1,5 +1,5 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 import { RadioGroup } from "../models/RadioGroup";
 import RadioGroupElement from "./RadioGroupElement";
 import { TypedLitElement } from "../models/TypedEventTarget";
@@ -43,8 +43,8 @@ export default class ExerciseSelectorFilterOther extends (LitElement as TypedLit
     private bodyweightFilter: boolean | null = null;
     private favoritesFilter: boolean = false;
 
-    @property()
-    hasActiveFilters: boolean = false;
+    @state()
+    private hasActiveFilters: boolean = false;
 
     @query("#bodyweight-radio-group") bodyweightRadioGroup!: RadioGroupElement<boolean | null>;
     @query("#favorites-radio-group") favoritesRadioGroup!: RadioGroupElement<boolean>;

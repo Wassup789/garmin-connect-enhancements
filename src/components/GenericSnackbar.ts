@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { TypedLitElement } from "../models/TypedEventTarget";
 
 @customElement(GenericSnackbar.NAME)
@@ -88,8 +88,8 @@ export default class GenericSnackbar extends (LitElement as TypedLitElement<Gene
         }
     `;
 
-    @property()
-    isRemoving: boolean = false;
+    @state()
+    private isRemoving: boolean = false;
 
     constructor(
         private readonly label: string,

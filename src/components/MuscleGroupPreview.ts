@@ -1,4 +1,4 @@
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { css, html, LitElement, PropertyValues } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
@@ -121,15 +121,15 @@ export default class MuscleGroupPreview extends LitElement {
         }
     `;
 
-    @property({ type: Array })
+    @property({ type: Object })
     primaryMuscleGroups: Set<MuscleGroup> = new Set<MuscleGroup>();
-    @property({ type: Array })
+    @property({ type: Object })
     secondaryMuscleGroups: Set<MuscleGroup> = new Set<MuscleGroup>();
 
-    @property({ type: Boolean })
+    @property({ type: Boolean, reflect: true })
     legend: boolean = false;
 
-    @property()
+    @state()
     private muscleGroupClassMaps: Map<MuscleGroup, MuscleGroupClassMap> = new Map();
 
     constructor() {

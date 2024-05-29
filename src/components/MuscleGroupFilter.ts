@@ -20,7 +20,7 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
             flex-direction: row;
             align-items: center;
         }
-        :host(:not([active="true"])) .refined-container,
+        :host(:not([active])) .refined-container,
         :host([value="4"]) .exclude-button {
             display: none;
         }
@@ -53,16 +53,19 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
         }
     `;
 
-    @property({ attribute: "value", reflect: true })
     private _value: MuscleGroupFilterValue = MuscleGroupFilterValue.INACTIVE;
+    @property({ reflect: true })
+    private set value(val: MuscleGroupFilterValue) {
+        this._value = val;
+    }
     get value(): MuscleGroupFilterValue {
         return this._value;
     }
 
-    @property()
+    @property({ reflect: true })
     muscleGroup: string = "";
 
-    @property({ reflect: true })
+    @property({ type: Boolean, reflect: true })
     active: boolean = false;
 
     @query(".input-container checkbox-elem") input!: CheckboxElement;
@@ -100,10 +103,10 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
             this.primaryInput.checked = true;
             this.secondaryInput.checked = true;
 
-            this._value = MuscleGroupFilterValue.ALL;
+            this.value = MuscleGroupFilterValue.ALL;
             this.dispatchEvent(new CustomEvent(MuscleGroupFilter.EVENT_ON_ACTIVE, { detail: this }));
         } else {
-            this._value = MuscleGroupFilterValue.INACTIVE;
+            this.value = MuscleGroupFilterValue.INACTIVE;
             this.dispatchEvent(new CustomEvent(MuscleGroupFilter.EVENT_ON_INACTIVE, { detail: this }));
         }
 
@@ -114,9 +117,9 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
 
     private onRefinedInput(skipUpdate: boolean = false) {
         if (!this.primaryInput.checked && !this.secondaryInput.checked) {
-            this._value = MuscleGroupFilterValue.EXCLUDE;
+            this.value = MuscleGroupFilterValue.EXCLUDE;
         } else {
-            this._value = (this.primaryInput.checked && this.secondaryInput.checked) ? MuscleGroupFilterValue.ALL : (this.primaryInput.checked ? MuscleGroupFilterValue.PRIMARY : MuscleGroupFilterValue.SECONDARY);
+            this.value = (this.primaryInput.checked && this.secondaryInput.checked) ? MuscleGroupFilterValue.ALL : (this.primaryInput.checked ? MuscleGroupFilterValue.PRIMARY : MuscleGroupFilterValue.SECONDARY);
         }
 
         if (!skipUpdate) {

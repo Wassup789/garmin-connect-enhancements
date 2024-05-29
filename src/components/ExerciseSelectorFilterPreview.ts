@@ -1,5 +1,5 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { ExerciseMuscleGroups } from "../interceptors/ExerciseResponseInterceptor";
 
 @customElement(ExerciseSelectorFilterPreview.NAME)
@@ -77,14 +77,14 @@ export default class ExerciseSelectorFilterPreview extends LitElement {
         }
     `;
 
-    @property()
+    @property({ reflect: true })
     overlayTitle: string = "";
 
     @property({ type: Object })
     muscleMap: ExerciseMuscleGroups | null = null;
 
-    @property({ type: Boolean })
-    isOverlayActive: boolean = false;
+    @state()
+    private isOverlayActive: boolean = false;
 
     protected render(): unknown {
         return html`

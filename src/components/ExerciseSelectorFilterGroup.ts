@@ -76,7 +76,7 @@ export default class ExerciseSelectorFilterGroup extends (LitElement as TypedLit
     @property()
     id: string = "";
 
-    @property()
+    @property({ reflect: true })
     name: string = "";
 
     @property({ type: Boolean, reflect: true })
