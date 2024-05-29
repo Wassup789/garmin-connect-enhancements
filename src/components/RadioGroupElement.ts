@@ -3,6 +3,7 @@ import { css, html, LitElement, PropertyValues } from "lit";
 import { RadioGroup } from "../models/RadioGroup";
 import { RadioGroupValue } from "../models/RadioGroupValue";
 import { TypedLitElement } from "../models/TypedEventTarget";
+import { when } from "lit/directives/when.js";
 
 @customElement(RadioGroupElement.NAME)
 export default class RadioGroupElement<T> extends (LitElement as TypedLitElement<RadioGroupElement<unknown>, RadioGroupElementEventMap<unknown>>) {
@@ -43,8 +44,9 @@ export default class RadioGroupElement<T> extends (LitElement as TypedLitElement
     private checkedRadioGroupValue: RadioGroupValue<T> | null = null;
 
     protected render(): unknown {
-        return this.radioGroup ? html`
-            ${this.radioGroup.values.map((e) => html`
+        return html`
+            ${when(this.radioGroup, (radioGroup) => html`
+                ${radioGroup.values.map((e) => html`
                 <div
                         class="input-radio"
                         @click=${() => this.setValue(e.value)}
@@ -55,7 +57,8 @@ export default class RadioGroupElement<T> extends (LitElement as TypedLitElement
                         class="input-text"
                         @click=${() => this.setValue(e.value)}>${e.label}</span>
             `)}
-        ` : "";
+            `, () => "")}
+        `;
     }
 
     protected updated(changedProperties: PropertyValues) {

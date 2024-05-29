@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { TypedLitElement } from "../models/TypedEventTarget";
+import { when } from "lit/directives/when.js";
 
 @customElement(GenericSnackbar.NAME)
 export default class GenericSnackbar extends (LitElement as TypedLitElement<GenericSnackbar, GenericSnackbarEventMap>) {
@@ -108,18 +109,15 @@ export default class GenericSnackbar extends (LitElement as TypedLitElement<Gene
     }
 
     protected render(): unknown {
-        const button = this.actionLabel
-            ? html`
-            <button @click=${() => this.onActionClick()}>
-                ${this.actionLabel}
-            </button>`
-            : "";
-
         return html`
             <div id="container">
                 <div id="content" ?removing=${this.isRemoving}>
                     <label>${this.label}</label>
-                    ${button}
+                    ${when(this.actionLabel, () => html`
+                        <button @click=${() => this.onActionClick()}>
+                            ${this.actionLabel}
+                        </button>
+                    `, () => "")}
                 </div>
             </div>
         `;

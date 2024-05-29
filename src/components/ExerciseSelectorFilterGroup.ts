@@ -2,6 +2,7 @@ import { customElement, property } from "lit/decorators.js";
 import { css, LitElement, html, PropertyValues } from "lit";
 import StorageService from "../services/StorageService";
 import { TypedLitElement } from "../models/TypedEventTarget";
+import { when } from "lit/directives/when.js";
 
 type FilterGroupStorageData = Record<string, boolean>;
 
@@ -198,22 +199,19 @@ export default class ExerciseSelectorFilterGroup extends (LitElement as TypedLit
     }
 
     protected render(): unknown {
-        let headerSuffix;
-        if (this.togglable) {
-            headerSuffix = html`
-                <span>${this.name}</span>
-                <div class="header-active"
-                     ?active=${this.filterActive} 
-                     @click=${(event: MouseEvent) => this.onHeaderActiveClick(event)}>ACTIVE</div>
-                <div class="header-toggle"></div>
-            `;
-        } else {
-            headerSuffix = html`${this.name}`;
-        }
-
         return html`
             <div class="container">
-                <div class="header" @click=${() => this.active = !this.active}>${headerSuffix}</div>
+                <div class="header" @click=${() => this.active = !this.active}>
+                    ${when(this.togglable, () => html`
+                        <span>${this.name}</span>
+                        <div class="header-active"
+                             ?active=${this.filterActive}
+                             @click=${(event: MouseEvent) => this.onHeaderActiveClick(event)}>ACTIVE</div>
+                        <div class="header-toggle"></div>
+                    `, () => html`
+                        ${this.name}
+                    `)}
+                </div>
                 <div class="content">
                     <slot></slot>
                 </div>
