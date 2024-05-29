@@ -20,6 +20,7 @@ export default class ExerciseSelector extends (LitElement as TypedLitElement<Exe
 
         :host {
             position: relative;
+            display: block;
             --width: 100%;
             --min-popup-width: 15rem;
             --link-color: #1976d2;
