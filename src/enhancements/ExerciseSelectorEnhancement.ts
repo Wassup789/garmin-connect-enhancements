@@ -1,11 +1,11 @@
 import { OnObserverDestroyFunct } from "../models/OnObserverDestroyFunct";
-import ExerciseSelector from "../components/ExerciseSelector";
+import ExerciseSelectorBasicDelegate from "../models/ExerciseSelectorBasicDelegate";
 
 export function takeoverExerciseContainer(container: HTMLElement): OnObserverDestroyFunct {
     try {
-        const exerciseSelector = new ExerciseSelector(container);
+        const basicExerciseSelector = new ExerciseSelectorBasicDelegate(container);
 
-        container.append(exerciseSelector);
+        container.append(basicExerciseSelector.exerciseSelector);
     } catch (e) {
         // do nothing, invalid element
         return false;
