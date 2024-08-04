@@ -29,7 +29,7 @@ export default class ExerciseSelectorPopup extends LitElement {
         let instance = this.INSTANCES.get(selector.type);
 
         if (!instance) {
-            instance = new ExerciseSelectorPopup(selector);
+            instance = new ExerciseSelectorPopup(selector.generateOptions());
             this.INSTANCES.set(selector.type, instance);
         }
 
@@ -158,11 +158,10 @@ export default class ExerciseSelectorPopup extends LitElement {
     @query("input") inputElem!: HTMLInputElement;
     @query(".options-container") optionsElem!: HTMLInputElement;
 
-    private constructor(initialSelector: ExerciseSelector) {
+    private constructor(options: ExerciseOption[]) {
         super();
 
-        const selectElem = initialSelector.parentSelectElem;
-        this.options = this.generateOptions(selectElem);
+        this.options = options;
         this.allOptions = this.options;
         this.groups = this.generateOptionGroups();
         this.populateOptionElements();
@@ -193,7 +192,7 @@ export default class ExerciseSelectorPopup extends LitElement {
             </div>
             <div class="filters-container">
                 <exercise-selector-filter-applies
-                        style=${styleMap({ display: this.host && !this.host.fromWorkoutEditor ? "" : "none" })}
+                        style=${styleMap({ display: this.host && this.host.canApplyToMultipleSets ? "" : "none" })}
                         @on-input=${(evt: CustomEvent<ApplyMode>) => this.applyMode = evt.detail}></exercise-selector-filter-applies>
                 <exercise-selector-filter-preview
                         .overlayTitle=${this.selectedOption?.text || ""}
@@ -557,23 +556,6 @@ export default class ExerciseSelectorPopup extends LitElement {
     onWindowBlur = () => {
         this.deactivate();
     };
-
-    private generateOptions(selectElem: HTMLSelectElement): ExerciseOption[] {
-        const usedKeys: Record<string, true> = {};
-
-        return Array.from(selectElem.querySelectorAll("option"))
-            .filter((e) => !e.parentElement!.matches("[label='Suggested']"))
-            .map((e) => {
-                return new ExerciseOption(e);
-            })
-            .filter((item) => {
-                const key = item.categoryValue + "~~~" + item.value;
-                return (item.value === ExerciseSelectorPopup.EMPTY_EXERCISE_VALUE || Object.prototype.hasOwnProperty.call(usedKeys, key)) ? false : (usedKeys[key] = true);
-            })
-            .sort((a, b) => {
-                return (Number(b.suggested) - Number(a.suggested)) || a.textCleaned.localeCompare(b.textCleaned);
-            });
-    }
 
     private updateFilterVisibilityForOption(option: ExerciseOption) {
         option.updateFilterVisibility(this.activeMuscleGroupFilters, this.bodyweightFilter, this.favoritesFilter);

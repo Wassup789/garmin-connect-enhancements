@@ -18,7 +18,6 @@ export default class ExerciseOption {
     favorited: boolean;
 
     elem!: ExerciseSelectorOption;
-    readonly optionElem: HTMLOptionElement;
 
     private _visible: boolean = true;
     get visible(): boolean {
@@ -49,13 +48,18 @@ export default class ExerciseOption {
         this.elem.underlinedValue = this.underlinedText;
     }
 
-    constructor(optionElem: HTMLOptionElement) {
-        this.value = ExerciseOption.findValueFromOptionElement(optionElem) || "";
-        this.categoryValue = ExerciseOption.findCategoryFromOptionElement(optionElem) || "";
-        this.text = optionElem.innerText.trim();
+    protected constructor(
+        value: string,
+        categoryValue: string,
+        text: string,
+        suggested: boolean
+    ) {
+        this.value = value;
+        this.categoryValue = categoryValue;
+        this.text = text.trim();
+        this.suggested = suggested;
+
         this.textCleaned = SearchHelper.clean(this.text);
-        this.optionElem = optionElem;
-        this.suggested = optionElem.parentElement!.matches("[label='Suggested']");
         this.favorited = FavoritesService.INSTANCE.hasFavorite(this.categoryValue, this.value);
     }
 
@@ -144,24 +148,5 @@ export default class ExerciseOption {
         } else {
             return option.textCleaned.charAt(0);
         }
-    }
-
-    static findExerciseOptionFromOptionElement(exerciseOptions: readonly ExerciseOption[], option: HTMLOptionElement): ExerciseOption | null {
-        const value = this.findValueFromOptionElement(option),
-            category = this.findCategoryFromOptionElement(option);
-
-        if (!value || !category) {
-            return null;
-        }
-
-        return exerciseOptions.find((e) => e.value === value && e.categoryValue === category) ?? null;
-    }
-
-    private static findValueFromOptionElement(option: HTMLOptionElement): string {
-        return option.value;
-    }
-
-    private static findCategoryFromOptionElement(option: HTMLOptionElement): string | null {
-        return option.dataset["exerciseCategory"] ?? null;
     }
 }
