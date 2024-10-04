@@ -1,35 +1,57 @@
+interface PropKeysObject {
+    [key: string]: PropKeysArray | PropKeysObject;
+}
+
+type PropKeysArray = string[];
+export type PropKeys = PropKeysObject | PropKeysArray;
+
 export default class ReactHelper {
     static closestProps(
         elem: HTMLElement,
-        propKeys: string[],
+        propKeys: PropKeys,
         maxDepth: number
     ): Record<string, unknown> | null {
-        let currentParent: HTMLElement | null = elem;
-        do {
-            const reactFiberKey = this.getReactFiberKey(currentParent);
+        let currentElement: HTMLElement | null = elem,
+            currentReactFiber: ReactFiber | null = null,
+            currentFiberDepth = maxDepth;
 
-            if (reactFiberKey && this.isReactFiber(currentParent[reactFiberKey])) {
-                const memoizedProps = (currentParent[reactFiberKey] as unknown as ReactFiber).memoizedProps,
+        do {
+            const reactFiberKey = this.getReactFiberKey(currentElement);
+
+            if (reactFiberKey && this.isReactFiber(currentElement[reactFiberKey])) {
+                currentReactFiber = currentElement[reactFiberKey] as unknown as ReactFiber;
+                break;
+            }
+            currentElement = currentElement.parentElement;
+            maxDepth--;
+        } while (currentElement && maxDepth > 0);
+
+        if (currentReactFiber) {
+            do {
+                const memoizedProps = (currentReactFiber as unknown as ReactFiber).memoizedProps,
                     matchingProps = this.closestPropsRecursive(memoizedProps, propKeys);
 
                 if (matchingProps) {
                     return matchingProps;
                 }
-            }
 
-            currentParent = currentParent.parentElement;
-            maxDepth--;
-        } while (currentParent && maxDepth > 0);
+                currentReactFiber = currentReactFiber.return;
+                currentFiberDepth--;
+            } while (currentReactFiber && currentFiberDepth > 0);
+        }
 
         return null;
     }
 
-    private static closestPropsRecursive(props: ReactProps, propKeys: string[]): Record<string, unknown> | null {
+    private static closestPropsRecursive(props: ReactProps, propKeys: PropKeys): Record<string, unknown> | null {
         if (
             "props" in props &&
-            propKeys.filter((e) => e in props.props).length === propKeys.length
+            this.hasPropKeys(props.props, propKeys)
         ) {
             return props.props;
+        }
+        if (this.hasPropKeys(props, propKeys)) {
+            return props;
         }
 
         if ("children" in props && props.children) {
@@ -49,10 +71,59 @@ export default class ReactHelper {
         return null;
     }
 
+    private static hasPropKeys(props: BaseReactProps, propKeys: PropKeys): boolean {
+        if (Array.isArray(propKeys)) {
+            return this.hasPropKeysArr(props, propKeys);
+        } else {
+            return this.hasPropKeysObject(props, propKeys);
+        }
+    }
+
+    private static hasPropKeysObject(props: unknown, propKeysObject: PropKeysObject): boolean {
+        if (!this.isValidBaseReactProps(props)) {
+            return false;
+        }
+
+        const keys = Object.keys(propKeysObject);
+        for (const key of keys) {
+            if (!(key in props)) {
+                return false;
+            }
+
+            const targetProps = propKeysObject[key];
+            if (Array.isArray(targetProps)) {
+                if (targetProps.length !== 0 && !this.hasPropKeysArr(props[key], targetProps)) {
+                    return false;
+                }
+            } else {
+                if (!this.hasPropKeysObject(props[key], targetProps)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    private static hasPropKeysArr(props: unknown, propKeysArray: PropKeysArray): boolean {
+        if (!this.isValidBaseReactProps(props)) {
+            return false;
+        }
+
+        return propKeysArray.filter((e) => e in props).length === propKeysArray.length;
+    }
+
+    private static isValidBaseReactProps(props: unknown): props is BaseReactProps {
+        return <boolean>props && typeof props === "object" && !Array.isArray(props);
+    }
+
     private static getReactFiberKey<T extends object>(elem: T): keyof T | null {
+        return this.getKeyStartsWith(elem, "__reactFiber");
+    }
+
+    private static getKeyStartsWith<T extends object>(elem: T, needle: string): keyof T | null {
         const objKeys = Object.keys(elem) as (keyof T)[];
 
-        return objKeys.find((e) => (e as string).startsWith("__reactFiber")) || null;
+        return objKeys.find((e) => (e as string).startsWith(needle)) || null;
     }
 
     private static isReactFiber(obj: unknown): obj is ReactFiber {
@@ -64,8 +135,10 @@ export default class ReactHelper {
 
 type ReactFiber = {
     memoizedProps: ReactProps;
+    return: ReactFiber;
 };
 type ReactProps = {
     children?: ReactProps | ReactProps[];
-    props: Record<string, unknown> & ReactProps;
+    props: BaseReactProps & ReactProps;
 };
+type BaseReactProps = Record<string, unknown>;

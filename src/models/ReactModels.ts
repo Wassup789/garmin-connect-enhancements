@@ -14,16 +14,25 @@ export function isRawReactExerciseOption(obj: unknown): obj is RawReactExerciseO
 }
 
 export interface RawReactExercisePickerProps {
-    categoryKey?: string;
-    exerciseKey?: string;
-    flattenedExerciseTypes: Array<RawReactExerciseOption>;
+    categoryKey: string;
+    exerciseKey: string;
     onChange: ((changed: { categoryKey: string; exerciseKey: string }) => void);
 }
 
 export function isRawReactExercisePickerProps(obj: unknown): obj is RawReactExercisePickerProps {
     return Boolean(
         typeof obj === "object" && obj && !Array.isArray(obj) &&
-        "flattenedExerciseTypes" in obj && Array.isArray(obj.flattenedExerciseTypes) &&
         "onChange" in obj && typeof obj.onChange === "function"
+    );
+}
+
+export interface RawReactExercisePickerExercisesProps {
+    flattenedExerciseTypes: Array<RawReactExerciseOption>;
+}
+
+export function isRawReactExercisePickerExercisesProps(obj: unknown): obj is RawReactExercisePickerExercisesProps {
+    return Boolean(
+        typeof obj === "object" && obj && !Array.isArray(obj) &&
+        "flattenedExerciseTypes" in obj && Array.isArray(obj.flattenedExerciseTypes)
     );
 }

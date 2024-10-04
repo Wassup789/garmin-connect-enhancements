@@ -4,10 +4,10 @@ import ExerciseSelectorReactDelegate from "../models/ExerciseSelectorReactDelega
 
 export function takeoverWorkoutExerciseEditor(container: HTMLElement): OnObserverDestroyFunct {
     try {
-        const props = ReactHelper.closestProps(container, ["flattenedExerciseTypes", "onChange"], 5);
-
-        if (props) {
-            const reactExerciseSelector = new ExerciseSelectorReactDelegate(props, container);
+        const props = ReactHelper.closestProps(container, ["exerciseKey", "categoryKey", "onChange"], 20),
+            exerciseProps = ReactHelper.closestProps(container, ["flattenedExerciseTypes"], 20);
+        if (props && exerciseProps) {
+            const reactExerciseSelector = new ExerciseSelectorReactDelegate(props, exerciseProps, container);
             container.parentElement!.append(reactExerciseSelector.exerciseSelector);
         }
     } catch (e) {

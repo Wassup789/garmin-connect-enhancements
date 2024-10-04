@@ -4,27 +4,32 @@ import ExerciseOption from "./ExerciseOption";
 import ExerciseSelectorDelegate from "./ExerciseSelectorDelegate";
 import ReactExerciseOption from "./ReactExerciseOption";
 import {
-    isRawReactExerciseOption,
+    isRawReactExerciseOption, isRawReactExercisePickerExercisesProps,
     isRawReactExercisePickerProps,
-    RawReactExerciseOption,
+    RawReactExerciseOption, RawReactExercisePickerExercisesProps,
     RawReactExercisePickerProps
 } from "./ReactModels";
 
 export default class ExerciseSelectorReactDelegate implements ExerciseSelectorDelegate {
     readonly exerciseSelector: ExerciseSelector;
     readonly suggestedGroup: ExerciseGroup;
-    readonly reactProps: RawReactExercisePickerProps;
+    readonly stateProps: RawReactExercisePickerProps;
+    readonly exercisesProps: RawReactExercisePickerExercisesProps;
 
     private connectErrorListener?: () => void;
     private disconnectErrorListener?: () => void;
 
-    constructor(reactProps: Record<string, unknown>, readonly container: HTMLElement) {
-        if (!isRawReactExercisePickerProps(reactProps)) {
-            throw new Error("Invalid react props given, missing required keys");
+    constructor(reactStateProps: Record<string, unknown>, reactExercisesProps: Record<string, unknown>, readonly container: HTMLElement) {
+        if (!isRawReactExercisePickerProps(reactStateProps)) {
+            throw new Error("Invalid react state props given, missing required keys");
         }
-        this.reactProps = reactProps;
+        if (!isRawReactExercisePickerExercisesProps(reactExercisesProps)) {
+            throw new Error("Invalid react exercises props given, missing required keys");
+        }
+        this.stateProps = reactStateProps;
+        this.exercisesProps = reactExercisesProps;
 
-        this.exerciseSelector = new ExerciseSelector(this, ExerciseSelectorReactDelegate.getType(reactProps), false, container);
+        this.exerciseSelector = new ExerciseSelector(this, ExerciseSelectorReactDelegate.getType(reactStateProps, reactExercisesProps), false, container);
         this.exerciseSelector.savedOption = this.getInitialSavedOption();
         this.suggestedGroup = new ExerciseGroup("Suggested");
 
@@ -50,19 +55,19 @@ export default class ExerciseSelectorReactDelegate implements ExerciseSelectorDe
         }
     }
 
-    private static getType(reactProps: Record<string, unknown>): string {
-        return `${"exerciseType" in reactProps ? reactProps.exerciseType : ""}:${(reactProps.flattenedExerciseTypes as Array<unknown>).length}`;
+    private static getType(reactProps: RawReactExercisePickerProps, reactExercisesProps: RawReactExercisePickerExercisesProps): string {
+        return `${"exerciseType" in reactProps ? reactProps.exerciseType : ""}:${(reactExercisesProps.flattenedExerciseTypes as Array<unknown>).length}`;
     }
 
     private getInitialSavedOption(): ExerciseOption | null {
-        const reactProps = this.reactProps;
+        const reactProps = this.stateProps;
         if (
             "categoryKey" in reactProps && typeof reactProps.categoryKey === "string" &&
             "exerciseKey" in reactProps && typeof reactProps.exerciseKey === "string"
         ) {
             const exerciseOption = ReactExerciseOption.findExerciseOption(this.exerciseSelector.popupInstance.allOptions, reactProps.categoryKey, reactProps.exerciseKey);
             if (!exerciseOption) {
-                console.warn("Failed to find the option instance for", this.reactProps);
+                console.warn("Failed to find the option instance for", this.stateProps);
             }
 
             return exerciseOption;
@@ -85,7 +90,7 @@ export default class ExerciseSelectorReactDelegate implements ExerciseSelectorDe
     }
 
     generateOptions(): ExerciseOption[] {
-        return (this.reactProps.flattenedExerciseTypes as RawReactExerciseOption[])
+        return (this.exercisesProps.flattenedExerciseTypes as RawReactExerciseOption[])
             .filter((e) => isRawReactExerciseOption(e))
             .map((e) => {
                 return new ReactExerciseOption(e);
@@ -94,7 +99,7 @@ export default class ExerciseSelectorReactDelegate implements ExerciseSelectorDe
 
     onSelectOption(option: ExerciseOption | null): boolean {
         if (option) {
-            this.reactProps.onChange({ categoryKey: option.categoryValue, exerciseKey: option.value });
+            this.stateProps.onChange({ categoryKey: option.categoryValue, exerciseKey: option.value });
 
             return true;
         }
