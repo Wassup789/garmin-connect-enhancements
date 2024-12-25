@@ -8,6 +8,7 @@ import MuscleGroupFilter from "../components/MuscleGroupFilter";
 import ExerciseSelectorOption from "../components/ExerciseSelectorOption";
 import SearchHelper from "../helpers/SearchHelper";
 import FavoritesService from "../services/FavoritesService";
+import { I18n } from "./I18n";
 
 export default class ExerciseOption {
     readonly value: string;
@@ -56,11 +57,22 @@ export default class ExerciseOption {
     ) {
         this.value = value;
         this.categoryValue = categoryValue;
-        this.text = text.trim();
+        this.text = ExerciseOption.parseText(value, categoryValue, text);
         this.suggested = suggested;
 
         this.textCleaned = SearchHelper.clean(this.text);
         this.favorited = FavoritesService.INSTANCE.hasFavorite(this.categoryValue, this.value);
+    }
+
+    private static parseText(value: string, categoryValue: string, text: string): string {
+        const out = text.trim();
+
+        const mapping = I18n.getExerciseTranslationWithExercisePair(value, categoryValue) || I18n.getExerciseTranslation(out);
+        if (mapping) {
+            return mapping;
+        }
+
+        return out;
     }
 
     updateFilterVisibility(activeMuscleGroupFilters: ReadonlySet<MuscleGroupFilter>, bodyweightFilter: boolean | null, hasFavoritesFilter: boolean) {

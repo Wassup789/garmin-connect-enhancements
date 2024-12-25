@@ -2,7 +2,9 @@ import ExerciseOption from "../models/ExerciseOption";
 import ExerciseGroup from "../models/ExerciseGroup";
 import ExerciseSelectorFilterMuscleGroups from "./ExerciseSelectorFilterMuscleGroups";
 import ExerciseSelectorOption, {
-    ExerciseSelectorOptionEvent, ExerciseSelectorOptionFavoriteUpdateEvent, ExerciseSelectorOptionSelectEvent
+    ExerciseSelectorOptionEvent,
+    ExerciseSelectorOptionFavoriteUpdateEvent,
+    ExerciseSelectorOptionSelectEvent
 } from "./ExerciseSelectorOption";
 import MuscleGroupFilter from "./MuscleGroupFilter";
 import { css, html, LitElement } from "lit";
@@ -12,6 +14,8 @@ import ExerciseSelector from "./ExerciseSelector";
 import { ApplyMode } from "./ExerciseSelectorFilterApplies";
 import { styleMap } from "lit/directives/style-map.js";
 import HistoryService, { HistoryData } from "../services/HistoryService";
+import { I18n } from "../models/I18n";
+import { Lazy } from "../models/Lazy";
 
 type BestOptionDetails = { option: ExerciseOption | null; startsWith: boolean; rank: number };
 
@@ -21,7 +25,7 @@ export default class ExerciseSelectorPopup extends LitElement {
 
     static readonly SEPARATOR_HEIGHT = 30;
     static readonly EMPTY_EXERCISE_VALUE = "choose_an_exercise";
-    static readonly EMPTY_EXERCISE_NAME = "Choose an exercise";
+    static readonly EMPTY_EXERCISE_NAME = new Lazy<string>(() => I18n.getExerciseTranslation("exercise_type_DROPDOWN_PLACEHOLDER", "Choose an Exercise"));
 
     static readonly INSTANCES: Map<string, ExerciseSelectorPopup> = new Map();
 
@@ -181,7 +185,7 @@ export default class ExerciseSelectorPopup extends LitElement {
 
         return html`
             <input type="search" 
-                   placeholder=${ExerciseSelectorPopup.EMPTY_EXERCISE_NAME}
+                   placeholder=${ExerciseSelectorPopup.EMPTY_EXERCISE_NAME.value}
                    @input=${() => this.onInput()}
                    @keydown=${(evt: KeyboardEvent) => this.onKeyDown(evt)}
                    @focus=${() => this.onFocus()}>

@@ -2,6 +2,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { css, html, LitElement, PropertyValues } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
+import { I18n } from "../models/I18n";
 
 type MuscleGroupClassMap = { untargeted: boolean; primary: boolean; secondary: boolean };
 
@@ -517,9 +518,9 @@ export default class MuscleGroupPreview extends LitElement {
                 </g>
             </svg>
             <div class="legend" style=${styleMap({ display: this.legend ? "" : "none" })}>
-                <div class="legend-row primary">Primary Muscles</div>
-                <div class="legend-row secondary">Secondary Muscles</div>
-                <div class="legend-row untargeted">Untargeted Muscles</div>
+                <div class="legend-row primary">${I18n.getExerciseTranslation("primary_muscles", "Primary Muscles")}</div>
+                <div class="legend-row secondary">${I18n.getExerciseTranslation("secondary_muscles", "Secondary Muscles")}</div>
+                <div class="legend-row untargeted">${I18n.getExerciseTranslation("untargeted_muscles", "Untargeted Muscles")}</div>
             </div>
         `;
     }

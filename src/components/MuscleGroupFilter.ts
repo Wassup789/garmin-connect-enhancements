@@ -4,6 +4,7 @@ import { MuscleGroupFilterValue } from "../models/MuscleGroupFilterValue";
 import Helper from "../helpers/Helper";
 import { TypedLitElement } from "../models/TypedEventTarget";
 import CheckboxElement from "./CheckboxElement";
+import { I18n } from "../models/I18n";
 
 @customElement(MuscleGroupFilter.NAME)
 export default class MuscleGroupFilter extends (LitElement as TypedLitElement<MuscleGroupFilter, MuscleGroupFilterEventMap>) {
@@ -76,7 +77,7 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
         return html`
             <div class="input-container">
                 <checkbox-elem
-                        label=${Helper.toTitleCase(this.muscleGroup)} 
+                        label=${I18n.getExerciseTranslation(`muscle_type_${this.muscleGroup}`, Helper.toTitleCase(this.muscleGroup))} 
                         @on-input=${() => this.onInput()}></checkbox-elem>
                 <span
                         class="preview" 
@@ -87,10 +88,10 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
             </div>
             <div class="refined-container">
                 <checkbox-elem
-                        label="Primary Muscle"
+                        label=${I18n.getExerciseTranslation("primary_muscles", "Primary Muscles")}
                         @on-input=${() => this.onRefinedInput()}></checkbox-elem>
                 <checkbox-elem
-                        label="Secondary Muscle"
+                        label=${I18n.getExerciseTranslation("secondary_muscles", "Secondary Muscles")}
                         @on-input=${() => this.onRefinedInput()}></checkbox-elem>
             </div>
         `;

@@ -93,7 +93,7 @@ export default class ExerciseSelector extends (LitElement as TypedLitElement<Exe
     protected render(): unknown {
         return html`
             <div class="pseudo-select" @click=${() => this.onPseudoClick()}>
-                ${(this.savedOption ? this.savedOption.text : "") || ExerciseSelectorPopup.EMPTY_EXERCISE_NAME}
+                ${(this.savedOption ? this.savedOption.text : "") || ExerciseSelectorPopup.EMPTY_EXERCISE_NAME.value}
             </div>
         `;
     }
