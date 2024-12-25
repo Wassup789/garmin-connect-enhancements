@@ -16,6 +16,8 @@ import { styleMap } from "lit/directives/style-map.js";
 import HistoryService, { HistoryData } from "../services/HistoryService";
 import { I18n } from "../models/I18n";
 import { Lazy } from "../models/Lazy";
+import ExerciseSelectorFilterEquipments from "./ExerciseSelectorFilterEquipments";
+import EquipmentFilter from "./EquipmentFilter";
 
 type BestOptionDetails = { option: ExerciseOption | null; startsWith: boolean; rank: number };
 
@@ -148,6 +150,11 @@ export default class ExerciseSelectorPopup extends LitElement {
         return this.filterMuscleGroups.activeFilters;
     }
 
+    @query("exercise-selector-filter-equipments") filterEquipments!: ExerciseSelectorFilterEquipments;
+    get activeEquipmentFilters(): ReadonlySet<EquipmentFilter> {
+        return this.filterEquipments.activeFilters;
+    }
+
     private applyMode: ApplyMode = "single";
     private bodyweightFilter: boolean | null = null;
     private favoritesFilter: boolean = false;
@@ -203,6 +210,8 @@ export default class ExerciseSelectorPopup extends LitElement {
                         .muscleMap=${this.selectedOption?.getExerciseMuscleMap() || null}></exercise-selector-filter-preview>
                 <exercise-selector-filter-muscle-groups 
                         @on-active-filters-update=${() => this.updateOptionsFilterVisibility()}></exercise-selector-filter-muscle-groups>
+                <exercise-selector-filter-equipments 
+                        @on-active-filters-update=${() => this.updateOptionsFilterVisibility()}></exercise-selector-filter-equipments>
                 <exercise-selector-filter-other
                         @on-bodyweight-update=${(evt: CustomEvent) => { this.bodyweightFilter = evt.detail; this.updateOptionsFilterVisibility(); }}
                         @on-favorites-update=${(evt: CustomEvent) => { this.favoritesFilter = evt.detail; this.updateOptionsFilterVisibility(); }}></exercise-selector-filter-other>
@@ -562,6 +571,6 @@ export default class ExerciseSelectorPopup extends LitElement {
     };
 
     private updateFilterVisibilityForOption(option: ExerciseOption) {
-        option.updateFilterVisibility(this.activeMuscleGroupFilters, this.bodyweightFilter, this.favoritesFilter);
+        option.updateFilterVisibility(this.activeMuscleGroupFilters, this.activeEquipmentFilters, this.bodyweightFilter, this.favoritesFilter);
     }
 }

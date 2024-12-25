@@ -1,6 +1,7 @@
 import { ExerciseResponseInterceptor } from "./interceptors/ExerciseResponseInterceptor";
 import { ExerciseSaveRequestInterceptor } from "./interceptors/ExerciseSaveRequestInterceptor";
 import XHRBaseInterceptor from "./models/XHRBaseInterceptor";
+import { ExerciseEquipmentResponseInterceptor } from "./interceptors/ExerciseEquipmentResponseInterceptor";
 
 const originalSend = XMLHttpRequest.prototype.send,
     originalOpen = XMLHttpRequest.prototype.open,
@@ -9,6 +10,7 @@ const originalSend = XMLHttpRequest.prototype.send,
 const interceptors: ReadonlyArray<XHRBaseInterceptor> = [
     new ExerciseResponseInterceptor(),
     new ExerciseSaveRequestInterceptor(),
+    new ExerciseEquipmentResponseInterceptor(),
 ];
 
 export function initXHRInterceptor() {

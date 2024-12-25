@@ -9,6 +9,8 @@ import ExerciseSelectorOption from "../components/ExerciseSelectorOption";
 import SearchHelper from "../helpers/SearchHelper";
 import FavoritesService from "../services/FavoritesService";
 import { I18n } from "./I18n";
+import EquipmentFilter from "../components/EquipmentFilter";
+import { EXERCISE_EQUIPMENT_MAPPINGS, EXERCISE_EQUIPMENTS } from "../interceptors/ExerciseEquipmentResponseInterceptor";
 
 export default class ExerciseOption {
     readonly value: string;
@@ -75,17 +77,42 @@ export default class ExerciseOption {
         return out;
     }
 
-    updateFilterVisibility(activeMuscleGroupFilters: ReadonlySet<MuscleGroupFilter>, bodyweightFilter: boolean | null, hasFavoritesFilter: boolean) {
+    updateFilterVisibility(activeMuscleGroupFilters: ReadonlySet<MuscleGroupFilter>, activeEquipmentFilters: ReadonlySet<EquipmentFilter>, bodyweightFilter: boolean | null, hasFavoritesFilter: boolean) {
         const hasMuscleGroupFilter = activeMuscleGroupFilters.size !== 0,
+            hasEquipmentFilter = activeEquipmentFilters.size !== 0,
             hasBodyweightFilter = bodyweightFilter !== null,
             setFilterVisibility = (visibility: boolean) => this._filterVisible = visibility;
 
-        if (!hasMuscleGroupFilter && !hasBodyweightFilter && !hasFavoritesFilter) {
+        if (!hasMuscleGroupFilter && !hasEquipmentFilter && !hasBodyweightFilter && !hasFavoritesFilter) {
             return setFilterVisibility(true);
         }
 
         if (hasFavoritesFilter && !this.favorited) {
             return setFilterVisibility(false);
+        }
+
+        if (hasEquipmentFilter && EXERCISE_EQUIPMENT_MAPPINGS) {
+            const exerciseCategory = EXERCISE_EQUIPMENT_MAPPINGS.categories[this.categoryValue];
+            if (exerciseCategory) {
+                const exerciseEquipments = exerciseCategory.exercises[this.value];
+
+                if (exerciseEquipments) {
+                    for (const filter of activeEquipmentFilters) {
+                        const hasEquipment = exerciseEquipments.has(filter.equipment);
+
+                        if (
+                            (filter.value === false && hasEquipment) ||
+                            (filter.value === true && !hasEquipment)
+                        ) {
+                            return setFilterVisibility(false);
+                        }
+                    }
+                } else {
+                    return setFilterVisibility(false);
+                }
+            } else {
+                return setFilterVisibility(false);
+            }
         }
 
         if ((hasMuscleGroupFilter || hasBodyweightFilter) && EXERCISE_MUSCLE_MAPPINGS) {

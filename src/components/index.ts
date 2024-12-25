@@ -1,5 +1,6 @@
 export { default as ExerciseSelector } from "./ExerciseSelectorPopup";
 export { default as ExerciseSelectorFilterApplies } from "./ExerciseSelectorFilterApplies";
+export { default as ExerciseSelectorFilterEquipments } from "./ExerciseSelectorFilterEquipments";
 export { default as ExerciseSelectorFilterGroup } from "./ExerciseSelectorFilterGroup";
 export { default as ExerciseSelectorFilterMuscleGroups } from "./ExerciseSelectorFilterMuscleGroups";
 export { default as ExerciseSelectorOption } from "./ExerciseSelectorOption";
@@ -10,3 +11,4 @@ export { default as ExerciseSelectorFilterOther } from "./ExerciseSelectorFilter
 export { default as RadioGroupElement } from "./RadioGroupElement";
 export { default as GenericSnackbar } from "./GenericSnackbar";
 export { default as CheckboxElement } from "./CheckboxElement";
+export { default as Checkbox3Element } from "./Checkbox3Element";
