@@ -33,17 +33,6 @@ export default class EquipmentFilter extends (LitElement as TypedLitElement<Equi
         .exclude-button:hover {
             text-decoration: underline;
         }
-
-        .preview {
-            margin-left: 0.25rem;
-            font-size: 0.85em;
-            cursor: pointer;
-            user-select: none;
-            color: var(--link-color);
-        }
-        .preview:hover {
-            text-decoration: underline;
-        }
     `;
 
     private _value: boolean | null = null;
