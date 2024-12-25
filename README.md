@@ -25,7 +25,7 @@ Available as a [Chrome extension][cws-url], [Firefox add-on][faddon-url], or [in
 ## Features
 <!-- TOC -->
   * [Improved exercise search](#improved-exercise-search)
-  * [Filter exercises by muscle group](#filter-exercises-by-muscle-group)
+  * [Filter exercises by muscle group or equipment](#filter-exercises-by-muscle-group)
   * [Preview an exercise's muscle group targets](#preview-an-exercises-muscle-group-targets)
   * [Apply the same exercise to multiple sets at once](#apply-the-same-exercise-to-multiple-sets-at-once)
   * [Exercise weight retention](#exercise-weight-retention)
@@ -46,7 +46,7 @@ The following demos showcase the improvements made to the original implementatio
 | Improved search for diacritics and special characters | <video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/7acb2a4c-c9e1-40e4-b7a1-dfb7d7d7a648"></video><br><video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/f5bbd4b0-d8b3-4429-b0b0-e9898dba4abb"></video> |
 
 
-### Filter exercises by muscle group
+### Filter exercises by muscle group or equipment
 
 Finding the most relevant workout exercise can be difficult within Garmin Connect, 
 as there could be many different names for the same workout and the exercise list from Garmin
@@ -55,7 +55,8 @@ may only have one of those variants.
 When searching for workouts, this enhancement allows the ability to find workouts that target specific
 muscle groups, find workouts that primarily or secondarily target a specific muscle group or exclude the muscle group entirely.
 
-<img src="assets/filter-muscle-group.png" width="221"/>
+<img src="assets/filter-muscle-group.png" width="220"/>
+<img src="assets/filter-equipment.png" width="220"/>
 
 ### Preview an exercise's muscle group targets
 
