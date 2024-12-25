@@ -9,6 +9,8 @@ import MuscleGroupFilter from "./MuscleGroupFilter";
 import { TypedLitElement } from "../models/TypedEventTarget";
 import { styleMap } from "lit/directives/style-map.js";
 import { classMap } from "lit/directives/class-map.js";
+import { I18n } from "../models/I18n";
+import Helper from "../helpers/Helper";
 
 @customElement(ExerciseSelectorFilterMuscleGroups.NAME)
 export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as TypedLitElement<ExerciseSelectorFilterMuscleGroups, ExerciseSelectorFilterMuscleGroupsEventMap>) {
@@ -119,30 +121,34 @@ export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as T
             return;
         }
 
-        this._filters.push(...[...EXERCISE_MUSCLES].sort().map((e) => {
-            const filter = new MuscleGroupFilter();
-            filter.muscleGroup = e;
+        this._filters.push(...[...EXERCISE_MUSCLES]
+            .map((e) => [e, I18n.getExerciseTranslation(`muscle_type_${e}`, Helper.toTitleCase(e))])
+            .sort(([aMG, aLabel], [bMG, bLabel]) => aLabel.localeCompare(bLabel))
+            .map(([muscleGroup, label]) => {
+                const filter = new MuscleGroupFilter();
+                filter.muscleGroup = muscleGroup;
+                filter.label = label;
 
-            filter.addEventListener(MuscleGroupFilter.EVENT_ON_ACTIVE, () => {
-                this._activeFilters.add(filter);
-                this.onActiveFiltersUpdate();
-            });
-            filter.addEventListener(MuscleGroupFilter.EVENT_ON_INACTIVE, () => {
-                this._activeFilters.delete(filter);
-                this.onActiveFiltersUpdate();
-            });
-            filter.addEventListener(MuscleGroupFilter.EVENT_ON_UPDATE, () => this.dispatchEvent(new Event(ExerciseSelectorFilterMuscleGroups.EVENT_ACTIVE_FILTERS_UPDATE)));
-            filter.addEventListener(MuscleGroupFilter.EVENT_ON_PREVIEW_TOGGLE, (e) => {
-                if (e.detail.displayPreview) {
-                    this.previewVisibility = { offsetTop: e.detail.filter.offsetTop, muscleGroupSet: new Set([e.detail.filter.muscleGroup]), displayToLeft: false };
-                    this.calculatePreviewPosition();
-                } else {
-                    this.previewVisibility = null;
-                }
-            });
+                filter.addEventListener(MuscleGroupFilter.EVENT_ON_ACTIVE, () => {
+                    this._activeFilters.add(filter);
+                    this.onActiveFiltersUpdate();
+                });
+                filter.addEventListener(MuscleGroupFilter.EVENT_ON_INACTIVE, () => {
+                    this._activeFilters.delete(filter);
+                    this.onActiveFiltersUpdate();
+                });
+                filter.addEventListener(MuscleGroupFilter.EVENT_ON_UPDATE, () => this.dispatchEvent(new Event(ExerciseSelectorFilterMuscleGroups.EVENT_ACTIVE_FILTERS_UPDATE)));
+                filter.addEventListener(MuscleGroupFilter.EVENT_ON_PREVIEW_TOGGLE, (e) => {
+                    if (e.detail.displayPreview) {
+                        this.previewVisibility = { offsetTop: e.detail.filter.offsetTop, muscleGroupSet: new Set([e.detail.filter.muscleGroup]), displayToLeft: false };
+                        this.calculatePreviewPosition();
+                    } else {
+                        this.previewVisibility = null;
+                    }
+                });
 
-            return filter;
-        }));
+                return filter;
+            }));
 
         this.requestUpdate();
 

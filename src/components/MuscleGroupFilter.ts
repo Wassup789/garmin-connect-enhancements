@@ -66,6 +66,8 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
     @property({ reflect: true })
     muscleGroup: string = "";
 
+    label: string = "";
+
     @property({ type: Boolean, reflect: true })
     active: boolean = false;
 
@@ -77,7 +79,7 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
         return html`
             <div class="input-container">
                 <checkbox-elem
-                        label=${I18n.getExerciseTranslation(`muscle_type_${this.muscleGroup}`, Helper.toTitleCase(this.muscleGroup))} 
+                        label=${this.label || Helper.toTitleCase(this.muscleGroup)} 
                         @on-input=${() => this.onInput()}></checkbox-elem>
                 <span
                         class="preview" 

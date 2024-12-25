@@ -58,6 +58,8 @@ export default class EquipmentFilter extends (LitElement as TypedLitElement<Equi
     @property({ reflect: true })
     equipment: string = "";
 
+    label: string = "";
+
     @property({ type: Boolean, reflect: true })
     active: boolean = false;
 
@@ -67,7 +69,7 @@ export default class EquipmentFilter extends (LitElement as TypedLitElement<Equi
         return html`
             <div class="input-container">
                 <checkbox3-elem
-                        label=${I18n.getEquipmentTranslation(`exercise_equipment_${this.equipment}`, Helper.toTitleCase(this.equipment))} 
+                        label=${this.label || Helper.toTitleCase(this.equipment)} 
                         @on-input=${() => this.onInput()}></checkbox3-elem>
                 <div class="flex-grow"></div>
                 <div class="exclude-button" @click=${() => this.exclude()}>Exclude</div>
