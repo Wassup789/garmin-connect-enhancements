@@ -66,6 +66,7 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
     @property({ reflect: true })
     muscleGroup: string = "";
 
+    @property({ reflect: true })
     label: string = "";
 
     @property({ type: Boolean, reflect: true })

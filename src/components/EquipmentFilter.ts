@@ -47,6 +47,7 @@ export default class EquipmentFilter extends (LitElement as TypedLitElement<Equi
     @property({ reflect: true })
     equipment: string = "";
 
+    @property({ reflect: true })
     label: string = "";
 
     @property({ type: Boolean, reflect: true })
