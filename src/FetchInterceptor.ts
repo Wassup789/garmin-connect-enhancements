@@ -32,7 +32,7 @@ export function initFetchInterceptor() {
         const response = await originalFetch(...args);
 
         for (const interceptor of interceptors) {
-            const newResponse = interceptor.interceptFetch(url, args, response);
+            const newResponse = interceptor.interceptFetch(url, args, response.clone());
 
             if (newResponse) {
                 return newResponse;
