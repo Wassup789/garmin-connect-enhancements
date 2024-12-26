@@ -9,8 +9,8 @@ export const EXERCISE_EQUIPMENT_TRANSLATIONS: Readonly<TranslationMap> = exercis
 export const EXERCISE_TYPE_TRANSLATIONS: Readonly<TranslationMap> = exerciseTypeTranslations;
 
 export class ExerciseTranslationInterceptor extends FetchBaseInterceptor {
-    private static readonly EXERCISE_EQUIPMENT_URL_REGEX = /\/web-translations\/exercise_equipments\/exercise_equipments(_[a-z]+)?\.properties/;
-    private static readonly EXERCISE_TYPES_URL_REGEX = /\/web-translations\/exercise_types\/exercise_types(_[a-z]+)?\.properties/;
+    private static readonly EXERCISE_EQUIPMENT_URL_REGEX = /\/web-translations\/exercise_equipments\/exercise_equipments(_[^.]+)?\.properties/;
+    private static readonly EXERCISE_TYPES_URL_REGEX = /\/web-translations\/exercise_types\/exercise_types(_[^.]+)?\.properties/;
 
     private wasEquipmentI18n: boolean = false;
     private wasTypesI18n: boolean = false;
