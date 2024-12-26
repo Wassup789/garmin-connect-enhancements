@@ -69,35 +69,36 @@ export default class ExerciseSelectorFilterEquipments extends (LitElement as Typ
             return;
         }
 
-        this._filters.push(...[...EXERCISE_EQUIPMENTS]
-            .map((e) => [e, I18n.getEquipmentTranslation(`exercise_equipment_${e}`, Helper.toTitleCase(e))])
-            .sort(([aEquipment, aLabel], [bEquipment, bLabel]) => {
-                if (aEquipment === ExerciseSelectorFilterEquipments.EQUIPMENT_OTHER) {
-                    return 1;
-                }
-                if (bEquipment === ExerciseSelectorFilterEquipments.EQUIPMENT_OTHER) {
-                    return -1;
-                }
+        this._filters.push(
+            ...[...EXERCISE_EQUIPMENTS]
+                .map((equipment) => {
+                    const filter = new EquipmentFilter();
+                    filter.equipment = equipment;
+                    filter.label = I18n.getEquipmentTranslation(`exercise_equipment_${equipment}`, Helper.toTitleCase(equipment));
 
-                return aLabel.localeCompare(bLabel);
-            })
-            .map(([equipment, label]) => {
-                const filter = new EquipmentFilter();
-                filter.equipment = equipment;
-                filter.label = label;
+                    filter.addEventListener(EquipmentFilter.EVENT_ON_ACTIVE, () => {
+                        this._activeFilters.add(filter);
+                        this.onActiveFiltersUpdate();
+                    });
+                    filter.addEventListener(EquipmentFilter.EVENT_ON_INACTIVE, () => {
+                        this._activeFilters.delete(filter);
+                        this.onActiveFiltersUpdate();
+                    });
+                    filter.addEventListener(EquipmentFilter.EVENT_ON_UPDATE, () => this.dispatchEvent(new Event(ExerciseSelectorFilterEquipments.EVENT_ACTIVE_FILTERS_UPDATE)));
 
-                filter.addEventListener(EquipmentFilter.EVENT_ON_ACTIVE, () => {
-                    this._activeFilters.add(filter);
-                    this.onActiveFiltersUpdate();
-                });
-                filter.addEventListener(EquipmentFilter.EVENT_ON_INACTIVE, () => {
-                    this._activeFilters.delete(filter);
-                    this.onActiveFiltersUpdate();
-                });
-                filter.addEventListener(EquipmentFilter.EVENT_ON_UPDATE, () => this.dispatchEvent(new Event(ExerciseSelectorFilterEquipments.EVENT_ACTIVE_FILTERS_UPDATE)));
+                    return filter;
+                })
+                .sort((a, b) => {
+                    if (a.equipment === ExerciseSelectorFilterEquipments.EQUIPMENT_OTHER) {
+                        return 1;
+                    }
+                    if (b.equipment === ExerciseSelectorFilterEquipments.EQUIPMENT_OTHER) {
+                        return -1;
+                    }
 
-                return filter;
-            }));
+                    return a.label.localeCompare(b.label);
+                })
+        );
 
         this.requestUpdate();
 
