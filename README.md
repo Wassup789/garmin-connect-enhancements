@@ -25,7 +25,7 @@ Available as a [Chrome extension][cws-url], [Firefox add-on][faddon-url], or [in
 ## Features
 <!-- TOC -->
   * [Improved exercise search](#improved-exercise-search)
-  * [Filter exercises by muscle group or equipment](#filter-exercises-by-muscle-group)
+  * [Filter exercises by muscle group or equipment](#filter-exercises-by-muscle-group-or-equipment)
   * [Preview an exercise's muscle group targets](#preview-an-exercises-muscle-group-targets)
   * [Apply the same exercise to multiple sets at once](#apply-the-same-exercise-to-multiple-sets-at-once)
   * [Exercise weight retention](#exercise-weight-retention)
