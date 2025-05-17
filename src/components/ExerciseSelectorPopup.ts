@@ -508,7 +508,11 @@ export default class ExerciseSelectorPopup extends LitElement {
 
         if (applyMode === "*") {
             for (const exerciseSelector of ExerciseSelector.INSTANCES) {
-                if (this.host === exerciseSelector || exerciseSelector.popupInstance !== this) {
+                if (
+                    this.host === exerciseSelector ||
+                    exerciseSelector.popupInstance !== this ||
+                    exerciseSelector.closest(ExerciseSelector.CLOSEST_DIALOG_SELECTOR)
+                ) {
                     continue;
                 }
 

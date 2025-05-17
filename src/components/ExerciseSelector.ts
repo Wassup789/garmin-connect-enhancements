@@ -14,6 +14,8 @@ export default class ExerciseSelector extends (LitElement as TypedLitElement<Exe
 
     static readonly EVENT_ON_DISCONNECT = "on-disconnect";
 
+    static readonly CLOSEST_DIALOG_SELECTOR = "[class^=\"Dialog\"]";
+
     static styles = css`
         * {
             box-sizing: border-box;

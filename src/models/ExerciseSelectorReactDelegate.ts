@@ -29,7 +29,7 @@ export default class ExerciseSelectorReactDelegate implements ExerciseSelectorDe
         this.stateProps = reactStateProps;
         this.exercisesProps = reactExercisesProps;
 
-        this.exerciseSelector = new ExerciseSelector(this, ExerciseSelectorReactDelegate.getType(reactStateProps, reactExercisesProps), false, container);
+        this.exerciseSelector = new ExerciseSelector(this, ExerciseSelectorReactDelegate.getType(reactStateProps, reactExercisesProps), !container.closest(ExerciseSelector.CLOSEST_DIALOG_SELECTOR), container);
         this.exerciseSelector.savedOption = this.getInitialSavedOption();
         this.suggestedGroup = new ExerciseGroup("Suggested");
 
