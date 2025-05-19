@@ -120,8 +120,10 @@ export default class ExerciseOption {
 
             if (exerciseMuscleMap) {
                 if (hasBodyweightFilter &&
-                    ((bodyweightFilter && (!("isBodyWeight" in exerciseMuscleMap) || exerciseMuscleMap.isBodyWeight === false)) ||
-                    (!bodyweightFilter && (("isBodyWeight" in exerciseMuscleMap && exerciseMuscleMap.isBodyWeight === true))))
+                    (
+                        (bodyweightFilter && (!("isBodyWeight" in exerciseMuscleMap) || exerciseMuscleMap.isBodyWeight === false)) ||
+                        (!bodyweightFilter && (("isBodyWeight" in exerciseMuscleMap && exerciseMuscleMap.isBodyWeight === true)))
+                    )
                 ) {
                     return setFilterVisibility(false);
                 }
