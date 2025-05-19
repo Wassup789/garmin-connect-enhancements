@@ -51,7 +51,7 @@ export default class ExerciseOption {
         this.elem.underlinedValue = this.underlinedText;
     }
 
-    protected constructor(
+    constructor(
         value: string,
         categoryValue: string,
         text: string,

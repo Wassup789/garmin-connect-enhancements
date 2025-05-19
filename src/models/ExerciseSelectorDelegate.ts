@@ -2,14 +2,30 @@ import ExerciseOption from "./ExerciseOption";
 import ExerciseGroup from "./ExerciseGroup";
 import ExerciseSelector from "../components/ExerciseSelector";
 
-export default interface ExerciseSelectorDelegate {
-    readonly exerciseSelector: ExerciseSelector;
-    readonly suggestedGroup: ExerciseGroup;
+export default abstract class ExerciseSelectorDelegate {
+    static readonly INSTANCES: Set<ExerciseSelectorDelegate> = new Set();
 
-    onConnected(): void;
-    onDisconnected(): void;
+    abstract readonly exerciseSelector: ExerciseSelector;
+    abstract readonly suggestedGroup: ExerciseGroup;
 
-    generateOptions(): ExerciseOption[];
+    abstract onConnected(): void;
+    abstract onDisconnected(): void;
 
-    onSelectOption(option: ExerciseOption | null): boolean;
+    abstract generateOptions(): ExerciseOption[];
+
+    protected abstract getInitialSavedOption(): ExerciseOption | null;
+    abstract onSelectOption(option: ExerciseOption | null): boolean;
+
+    protected constructor() {
+        ExerciseSelectorDelegate.INSTANCES.add(this);
+    }
+
+    release() {
+        ExerciseSelectorDelegate.INSTANCES.delete(this);
+    }
+
+    reset() {
+        this.exerciseSelector.resetPopupInstance();
+        this.exerciseSelector.savedOption = this.getInitialSavedOption();
+    }
 }

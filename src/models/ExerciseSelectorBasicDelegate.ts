@@ -5,7 +5,7 @@ import ExerciseGroup from "./ExerciseGroup";
 import ExerciseSelectorPopup from "../components/ExerciseSelectorPopup";
 import BasicExerciseOption from "./BasicExerciseOption";
 
-export default class ExerciseSelectorBasicDelegate implements ExerciseSelectorDelegate {
+export default class ExerciseSelectorBasicDelegate extends ExerciseSelectorDelegate {
     readonly parentSelectElem: HTMLSelectElement;
     readonly exerciseSelector: ExerciseSelector;
 
@@ -15,6 +15,8 @@ export default class ExerciseSelectorBasicDelegate implements ExerciseSelectorDe
     private disconnectErrorListener!: () => void;
 
     constructor(readonly container: HTMLElement) {
+        super();
+
         this.parentSelectElem = container.querySelector("select.chosen-select")!;
         this.suggestedGroup = this.generateSuggestedGroup();
 
@@ -38,7 +40,7 @@ export default class ExerciseSelectorBasicDelegate implements ExerciseSelectorDe
         this.disconnectErrorListener = () => observer.disconnect();
     }
 
-    private getInitialSavedOption(): ExerciseOption | null {
+    protected getInitialSavedOption(): ExerciseOption | null {
         const option = this.parentSelectElem.selectedOptions[0] ?? null;
         if (!option) {
             return null;

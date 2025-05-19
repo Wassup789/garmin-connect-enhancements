@@ -1,4 +1,5 @@
 import FetchBaseInterceptor, { FetchArgs } from "../models/FetchBaseInterceptor";
+import { I18n } from "../models/I18n";
 
 type TranslationMap = Record<string, string>;
 
@@ -53,6 +54,8 @@ export class ExerciseTranslationInterceptor extends FetchBaseInterceptor {
         this.parseWebTranslations(data, (key, value) => {
             exerciseTypeTranslations[key] = value;
         });
+
+        I18n.onExerciseTranslationReady();
     }
 
     private parseWebTranslations(input: string, callback: (key: string, value: string) => void) {

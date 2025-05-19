@@ -2,14 +2,16 @@ import { OnObserverDestroyFunct } from "../models/OnObserverDestroyFunct";
 import ExerciseSelectorBasicDelegate from "../models/ExerciseSelectorBasicDelegate";
 
 export function takeoverExerciseContainer(container: HTMLElement): OnObserverDestroyFunct {
-    try {
-        const basicExerciseSelector = new ExerciseSelectorBasicDelegate(container);
+    let exerciseSelectorDelegate: ExerciseSelectorBasicDelegate | null = null;
 
-        container.append(basicExerciseSelector.exerciseSelector);
+    try {
+        exerciseSelectorDelegate = new ExerciseSelectorBasicDelegate(container);
+
+        container.append(exerciseSelectorDelegate.exerciseSelector);
     } catch (e) {
         // do nothing, invalid element
         return false;
     }
 
-    return () => {};
+    return () => { exerciseSelectorDelegate?.release(); };
 }

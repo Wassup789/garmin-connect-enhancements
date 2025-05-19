@@ -72,7 +72,13 @@ export default class ExerciseSelector extends (LitElement as TypedLitElement<Exe
     readonly type: string;
     private readonly delegate: ExerciseSelectorDelegate;
 
-    readonly popupInstance: ExerciseSelectorPopup;
+    private _popupInstance: ExerciseSelectorPopup;
+    get popupInstance(): ExerciseSelectorPopup {
+        return this._popupInstance;
+    }
+    private set popupInstance(value: ExerciseSelectorPopup) {
+        this._popupInstance = value;
+    }
 
     @property()
     savedOption: ExerciseOption | null = null;
@@ -89,6 +95,10 @@ export default class ExerciseSelector extends (LitElement as TypedLitElement<Exe
         this.type = type;
         this.delegate = delegate;
 
+        this._popupInstance = ExerciseSelectorPopup.getInstanceForSelector(this);
+    }
+
+    resetPopupInstance() {
         this.popupInstance = ExerciseSelectorPopup.getInstanceForSelector(this);
     }
 

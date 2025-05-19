@@ -10,7 +10,7 @@ import {
     RawReactExercisePickerProps
 } from "./ReactModels";
 
-export default class ExerciseSelectorReactDelegate implements ExerciseSelectorDelegate {
+export default class ExerciseSelectorReactDelegate extends ExerciseSelectorDelegate {
     readonly exerciseSelector: ExerciseSelector;
     readonly suggestedGroup: ExerciseGroup;
     readonly stateProps: RawReactExercisePickerProps;
@@ -20,6 +20,8 @@ export default class ExerciseSelectorReactDelegate implements ExerciseSelectorDe
     private disconnectErrorListener?: () => void;
 
     constructor(reactStateProps: Record<string, unknown>, reactExercisesProps: Record<string, unknown>, readonly container: HTMLElement) {
+        super();
+
         if (!isRawReactExercisePickerProps(reactStateProps)) {
             throw new Error("Invalid react state props given, missing required keys");
         }
@@ -59,7 +61,7 @@ export default class ExerciseSelectorReactDelegate implements ExerciseSelectorDe
         return `${"exerciseType" in reactProps ? reactProps.exerciseType : ""}:${(reactExercisesProps.flattenedExerciseTypes as Array<unknown>).length}`;
     }
 
-    private getInitialSavedOption(): ExerciseOption | null {
+    protected getInitialSavedOption(): ExerciseOption | null {
         const reactProps = this.stateProps;
         if (
             "categoryKey" in reactProps && typeof reactProps.categoryKey === "string" &&

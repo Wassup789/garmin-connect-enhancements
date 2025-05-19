@@ -4,6 +4,25 @@ import {
 } from "../interceptors/ExerciseTranslationInterceptor";
 
 export class I18n {
+    private static isExerciseTranslationReady: boolean = false;
+    private static exerciseTranslationReadyListeners: Array<() => void> = [];
+
+    public static addOnExerciseTranslationReady(callback: () => void) {
+        if (!this.isExerciseTranslationReady) {
+            this.exerciseTranslationReadyListeners.push(callback);
+        }
+    }
+
+    public static onExerciseTranslationReady() {
+        this.isExerciseTranslationReady = true;
+
+        for (const listener of this.exerciseTranslationReadyListeners) {
+            listener();
+        }
+
+        this.exerciseTranslationReadyListeners = [];
+    }
+
     public static getExerciseTranslation<T = null>(value: string, defaultValue: T = null as T): string | T {
         return EXERCISE_TYPE_TRANSLATIONS[value] || defaultValue;
     }

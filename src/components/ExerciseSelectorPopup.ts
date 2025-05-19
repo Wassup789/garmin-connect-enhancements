@@ -18,6 +18,7 @@ import { I18n } from "../models/I18n";
 import { Lazy } from "../models/Lazy";
 import ExerciseSelectorFilterEquipments from "./ExerciseSelectorFilterEquipments";
 import EquipmentFilter from "./EquipmentFilter";
+import ExerciseSelectorDelegate from "../models/ExerciseSelectorDelegate";
 
 type BestOptionDetails = { option: ExerciseOption | null; startsWith: boolean; rank: number };
 
@@ -578,3 +579,11 @@ export default class ExerciseSelectorPopup extends LitElement {
         option.updateFilterVisibility(this.activeMuscleGroupFilters, this.activeEquipmentFilters, this.bodyweightFilter, this.favoritesFilter);
     }
 }
+
+I18n.addOnExerciseTranslationReady(() => {
+    ExerciseSelectorPopup.INSTANCES.clear();
+
+    for (const delegate of ExerciseSelectorDelegate.INSTANCES) {
+        delegate.reset();
+    }
+});
