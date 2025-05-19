@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, unsafeCSS } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { TypedLitElement } from "../models/TypedEventTarget";
 import { when } from "lit/directives/when.js";
@@ -38,12 +38,12 @@ export default class GenericSnackbar extends (LitElement as TypedLitElement<Gene
             padding-right: 8px;
             box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
             animation-name: display;
-            animation-duration: ${GenericSnackbar.DISPLAY_DURATION}s;
+            animation-duration: ${unsafeCSS(GenericSnackbar.DISPLAY_DURATION + "s")};
         }
 
         #content[removing] {
             animation-name: display-remove;
-            animation-duration: ${GenericSnackbar.DISPLAY_DURATION}s;
+            animation-duration: ${unsafeCSS(GenericSnackbar.DISPLAY_DURATION + "s")};
             pointer-events: none;
         }
 

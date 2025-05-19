@@ -28,7 +28,8 @@ export default class ActivityNameSuggestion extends LitElement {
             --icon-size: 24px;
             display: inline-block;
             height: var(--icon-size);
-            margin-top: -20px;
+            margin-top: -25px;
+            cursor: pointer;
             vertical-align: middle;
             user-select: none;
         }

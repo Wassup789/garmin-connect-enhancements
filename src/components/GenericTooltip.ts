@@ -1,11 +1,11 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, unsafeCSS } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 @customElement(GenericTooltip.NAME)
 export default class GenericTooltip extends LitElement {
     static readonly NAME = "generic-tooltip";
 
-    static readonly TRANSITION_DURATION = 300;
+    private static readonly TRANSITION_DURATION = 0.2;
 
     static styles = css`
         :host {
@@ -18,8 +18,9 @@ export default class GenericTooltip extends LitElement {
             z-index: 100;
             pointer-events: none;
             opacity: 1;
-            transition: opacity ${GenericTooltip.TRANSITION_DURATION / 1000}s;
             transform: translate3d(-50%, 0, 0);
+            transition-property: opacity;
+            transition-duration: ${unsafeCSS(GenericTooltip.TRANSITION_DURATION + "s")};
         }
         :host([removing]) {
             opacity: 0;
@@ -43,11 +44,11 @@ export default class GenericTooltip extends LitElement {
     ) {
         super();
 
-        host.addEventListener("mouseenter", () => this.onHostMouseOver());
-        host.addEventListener("mouseleave", () => this.onHostMouseOut());
+        host.addEventListener("mouseenter", () => this.onHostMouseEnter());
+        host.addEventListener("mouseleave", () => this.onHostMouseLeave());
     }
 
-    private onHostMouseOver() {
+    private onHostMouseEnter() {
         clearTimeout(this.interval);
         this.removing = true;
 
@@ -66,10 +67,10 @@ export default class GenericTooltip extends LitElement {
         });
     }
 
-    private onHostMouseOut() {
+    private onHostMouseLeave() {
         this.removing = true;
 
-        this.interval = setTimeout(() => this.parent?.removeChild(this), GenericTooltip.TRANSITION_DURATION);
+        this.interval = setTimeout(() => this.parent?.removeChild(this), GenericTooltip.TRANSITION_DURATION * 1000);
     }
 
     private static findScrollParent(elem: HTMLElement): HTMLElement {
