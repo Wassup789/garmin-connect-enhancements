@@ -505,6 +505,10 @@ export default class ExerciseSelectorPopup extends LitElement {
         if (!this.host) {
             return;
         }
+        if (!this.host.canApplyToMultipleSets) {
+            applyMode = "single";
+        }
+
         const historyDatas: HistoryData[] = [HistoryService.generateHistoryData(this.host, option)];
 
         if (applyMode === "*") {
