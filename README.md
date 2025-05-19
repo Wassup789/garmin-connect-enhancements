@@ -28,6 +28,7 @@ Available as a [Chrome extension][cws-url], [Firefox add-on][faddon-url], or [in
   * [Filter exercises by muscle group or equipment](#filter-exercises-by-muscle-group-or-equipment)
   * [Preview an exercise's muscle group targets](#preview-an-exercises-muscle-group-targets)
   * [Apply the same exercise to multiple sets at once](#apply-the-same-exercise-to-multiple-sets-at-once)
+  * [Activity name suggestion](#activity-name-suggestion)
   * [Exercise weight retention](#exercise-weight-retention)
   * [Favoriting exercises](#favoriting-exercises)
 <!-- TOC -->
@@ -71,6 +72,13 @@ an exercise, an option is added to apply the exercise to all the other sets, set
 every other set, and more.
 
 <video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/73eee228-b025-46ee-b434-db2ce3975e0e"></video>
+
+### Activity name suggestion
+
+Click on the star next to the activity name to get suggestions for your strength or yoga workouts.
+Works whether your activity simply has one exercise or is as complex as circuits.
+
+<img height="440" src="assets/suggest-activity-name.png"/>
 
 ### Exercise weight retention
 

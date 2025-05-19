@@ -12,3 +12,5 @@ export { default as RadioGroupElement } from "./RadioGroupElement";
 export { default as GenericSnackbar } from "./GenericSnackbar";
 export { default as CheckboxElement } from "./CheckboxElement";
 export { default as Checkbox3Element } from "./Checkbox3Element";
+export { default as GenericTooltip } from "./GenericTooltip";
+export { default as ActivityNameSuggestion } from "./ActivityNameSuggestion";

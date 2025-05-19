@@ -2,14 +2,17 @@ import { takeoverExerciseContainer } from "./enhancements/ExerciseSelectorEnhanc
 import { monitorWeightContainer } from "./enhancements/ExerciseSetWeightEnhancement";
 import { OnObserverDestroyFunct } from "./models/OnObserverDestroyFunct";
 import { takeoverWorkoutExerciseEditor } from "./enhancements/WorkoutExerciseEditorEnhancement";
+import { addActivityNameSuggestion } from "./enhancements/ActivityNameEnhancement";
 
 const CHOSEN_PARENT_CONTAINER_SELECTOR = ".workout-name, .workout-step-exercises",
     WEIGHT_CONTAINER_SELECTOR = ".input-append.weight-entry",
     WORKOUT_EXERCISE_CONTAINER_SELECTOR = "[class^='ExercisePicker_dropdown_']",
+    ACTIVITY_NAME_SELECTOR = ".activity-name-edit",
     CONTAINER_MAPPINGS: ReadonlyArray<[string, (parent: HTMLElement) => void]> = [
         [CHOSEN_PARENT_CONTAINER_SELECTOR, addExerciseContainersFromParent],
         [WEIGHT_CONTAINER_SELECTOR, addWeightContainersFromParent],
         [WORKOUT_EXERCISE_CONTAINER_SELECTOR, addExerciseContainersForWorkoutsFromParent],
+        [ACTIVITY_NAME_SELECTOR, addActivityNameSuggestionFromParent],
     ],
     knownContainers: Map<HTMLElement, Exclude<OnObserverDestroyFunct, false>> = new Map();
 
@@ -48,6 +51,9 @@ function addWeightContainersFromParent(parent: HTMLElement) {
 }
 function addExerciseContainersForWorkoutsFromParent(parent: HTMLElement) {
     addGenericContainersFromParent(parent, WORKOUT_EXERCISE_CONTAINER_SELECTOR, (container) => takeoverWorkoutExerciseEditor(container));
+}
+function addActivityNameSuggestionFromParent(parent: HTMLElement) {
+    addGenericContainersFromParent(parent, ACTIVITY_NAME_SELECTOR, (container) => addActivityNameSuggestion(container));
 }
 
 function addGenericContainersFromParent(parent: HTMLElement, containerSelector: string, callback: (container: HTMLElement) => OnObserverDestroyFunct) {

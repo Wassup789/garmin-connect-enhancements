@@ -1,0 +1,90 @@
+import { LitElement, css, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
+
+@customElement(GenericTooltip.NAME)
+export default class GenericTooltip extends LitElement {
+    static readonly NAME = "generic-tooltip";
+
+    static readonly TRANSITION_DURATION = 300;
+
+    static styles = css`
+        :host {
+            position: absolute;
+            background: #3C3C3C;
+            color: #FFFFFF;
+            padding: 5px 6px;
+            margin: 5px 0;
+            font-size: 13px;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity ${GenericTooltip.TRANSITION_DURATION / 1000}s;
+            transform: translate3d(-50%, 0, 0);
+        }
+        :host([removing]) {
+            opacity: 0;
+        }
+    `;
+
+    protected render(): unknown {
+        return html`${this.text}`;
+    }
+
+    @property({ type: Boolean, reflect: true })
+    removing: boolean = false;
+
+    interval: number | undefined = undefined;
+
+    private parent: HTMLElement | null = null;
+
+    constructor(
+        private readonly host: HTMLElement,
+        private readonly text: string
+    ) {
+        super();
+
+        host.addEventListener("mouseenter", () => this.onHostMouseOver());
+        host.addEventListener("mouseleave", () => this.onHostMouseOut());
+    }
+
+    private onHostMouseOver() {
+        clearTimeout(this.interval);
+        this.removing = true;
+
+        // Assumes scroll parent has relative positioning
+        const parent = GenericTooltip.findScrollParent(this.host);
+        this.parent = parent;
+        this.parent.append(this);
+        requestAnimationFrame(() => {
+            const rect = this.host.getBoundingClientRect(),
+                parentRect = parent.getBoundingClientRect();
+
+            this.style.left = `${rect.left - parentRect.left + parent.scrollLeft + (rect.width / 2)}px`;
+            this.style.top = `${rect.top - parentRect.top + rect.height + parent.scrollTop}px`;
+
+            this.removing = false;
+        });
+    }
+
+    private onHostMouseOut() {
+        this.removing = true;
+
+        this.interval = setTimeout(() => this.parent?.removeChild(this), GenericTooltip.TRANSITION_DURATION);
+    }
+
+    private static findScrollParent(elem: HTMLElement): HTMLElement {
+        if (!(elem instanceof HTMLElement)) {
+            return null!;
+        }
+
+        const style = window.getComputedStyle(elem);
+        const overflow = style.overflowY;
+        const hasScroller = elem.scrollHeight > elem.clientHeight;
+
+        if (hasScroller && !overflow.includes("visible") && !overflow.includes("hidden")) {
+            return elem;
+        }
+
+        return this.findScrollParent(elem.parentElement as HTMLElement) || document.body;
+    }
+}
