@@ -9,11 +9,13 @@ export default class GenericTooltip extends LitElement {
 
     static styles = css`
         :host {
+            --background-color: #3C3C3C;
+            
             position: absolute;
-            background: #3C3C3C;
+            background: var(--background-color);
             color: #FFFFFF;
             padding: 5px 6px;
-            margin: 5px 0;
+            margin: 6px 0;
             font-size: 13px;
             z-index: 100;
             pointer-events: none;
@@ -22,13 +24,24 @@ export default class GenericTooltip extends LitElement {
             transition-property: opacity;
             transition-duration: ${unsafeCSS(GenericTooltip.TRANSITION_DURATION + "s")};
         }
+        :host::before {
+            content: "";
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--background-color);
+            transform: translate(-50%) rotate(45deg);
+            z-index: -1;
+        }
         :host([removing]) {
             opacity: 0;
         }
     `;
 
     protected render(): unknown {
-        return html`${this.text}`;
+        return html`<div></div>${this.text}`;
     }
 
     @property({ type: Boolean, reflect: true })
