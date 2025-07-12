@@ -1,6 +1,6 @@
-import ExerciseOption from "./ExerciseOption";
-import ExerciseGroup from "./ExerciseGroup";
-import ExerciseSelector from "../components/ExerciseSelector";
+import ExerciseOption from "../../models/ExerciseOption";
+import ExerciseGroup from "../../models/ExerciseGroup";
+import ExerciseSelector from "../../components/ExerciseSelector";
 
 export default abstract class ExerciseSelectorDelegate {
     static readonly INSTANCES: Set<ExerciseSelectorDelegate> = new Set();

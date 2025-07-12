@@ -1,9 +1,9 @@
-import ExerciseSelector from "../components/ExerciseSelector";
-import ExerciseOption from "./ExerciseOption";
+import ExerciseSelector from "../../components/ExerciseSelector";
+import ExerciseOption from "../../models/ExerciseOption";
 import ExerciseSelectorDelegate from "./ExerciseSelectorDelegate";
-import ExerciseGroup from "./ExerciseGroup";
-import ExerciseSelectorPopup from "../components/ExerciseSelectorPopup";
-import BasicExerciseOption from "./BasicExerciseOption";
+import ExerciseGroup from "../../models/ExerciseGroup";
+import ExerciseSelectorPopup from "../../components/ExerciseSelectorPopup";
+import BasicExerciseOption from "../../models/BasicExerciseOption";
 
 export default class ExerciseSelectorBasicDelegate extends ExerciseSelectorDelegate {
     readonly parentSelectElem: HTMLSelectElement;

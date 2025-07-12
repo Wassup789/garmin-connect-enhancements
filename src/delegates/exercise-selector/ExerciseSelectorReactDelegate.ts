@@ -1,14 +1,14 @@
-import ExerciseSelector from "../components/ExerciseSelector";
-import ExerciseGroup from "./ExerciseGroup";
-import ExerciseOption from "./ExerciseOption";
+import ExerciseSelector from "../../components/ExerciseSelector";
+import ExerciseGroup from "../../models/ExerciseGroup";
+import ExerciseOption from "../../models/ExerciseOption";
 import ExerciseSelectorDelegate from "./ExerciseSelectorDelegate";
-import ReactExerciseOption from "./ReactExerciseOption";
+import ReactExerciseOption from "../../models/ReactExerciseOption";
 import {
     isRawReactExerciseOption, isRawReactExercisePickerExercisesProps,
     isRawReactExercisePickerProps,
     RawReactExerciseOption, RawReactExercisePickerExercisesProps,
     RawReactExercisePickerProps
-} from "./ReactModels";
+} from "../../models/ReactModels";
 
 export default class ExerciseSelectorReactDelegate extends ExerciseSelectorDelegate {
     readonly exerciseSelector: ExerciseSelector;

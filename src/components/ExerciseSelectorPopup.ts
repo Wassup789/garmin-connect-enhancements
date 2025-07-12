@@ -18,7 +18,7 @@ import { I18n } from "../models/I18n";
 import { Lazy } from "../models/Lazy";
 import ExerciseSelectorFilterEquipments from "./ExerciseSelectorFilterEquipments";
 import EquipmentFilter from "./EquipmentFilter";
-import ExerciseSelectorDelegate from "../models/ExerciseSelectorDelegate";
+import ExerciseSelectorDelegate from "../delegates/exercise-selector/ExerciseSelectorDelegate";
 
 type BestOptionDetails = { option: ExerciseOption | null; startsWith: boolean; rank: number };
 

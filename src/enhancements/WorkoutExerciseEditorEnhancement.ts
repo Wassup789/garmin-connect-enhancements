@@ -1,6 +1,6 @@
 import { OnObserverDestroyFunct } from "../models/OnObserverDestroyFunct";
 import ReactHelper from "../helpers/ReactHelper";
-import ExerciseSelectorReactDelegate from "../models/ExerciseSelectorReactDelegate";
+import ExerciseSelectorReactDelegate from "../delegates/exercise-selector/ExerciseSelectorReactDelegate";
 
 export function takeoverWorkoutExerciseEditor(container: HTMLElement): OnObserverDestroyFunct {
     let exerciseSelectorDelegate: ExerciseSelectorReactDelegate | null = null;

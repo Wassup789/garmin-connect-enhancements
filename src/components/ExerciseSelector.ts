@@ -4,7 +4,7 @@ import ExerciseOption from "../models/ExerciseOption";
 import ExerciseSelectorPopup from "./ExerciseSelectorPopup";
 import ExerciseGroup from "../models/ExerciseGroup";
 import { TypedLitElement } from "../models/TypedEventTarget";
-import ExerciseSelectorDelegate from "../models/ExerciseSelectorDelegate";
+import ExerciseSelectorDelegate from "../delegates/exercise-selector/ExerciseSelectorDelegate";
 
 @customElement(ExerciseSelector.NAME)
 export default class ExerciseSelector extends (LitElement as TypedLitElement<ExerciseSelector, ExerciseSelectorEventMap>) {

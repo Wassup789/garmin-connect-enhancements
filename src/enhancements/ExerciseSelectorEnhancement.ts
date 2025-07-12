@@ -1,5 +1,5 @@
 import { OnObserverDestroyFunct } from "../models/OnObserverDestroyFunct";
-import ExerciseSelectorBasicDelegate from "../models/ExerciseSelectorBasicDelegate";
+import ExerciseSelectorBasicDelegate from "../delegates/exercise-selector/ExerciseSelectorBasicDelegate";
 
 export function takeoverExerciseContainer(container: HTMLElement): OnObserverDestroyFunct {
     let exerciseSelectorDelegate: ExerciseSelectorBasicDelegate | null = null;
