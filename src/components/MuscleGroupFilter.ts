@@ -5,6 +5,7 @@ import Helper from "../helpers/Helper";
 import { TypedLitElement } from "../models/TypedEventTarget";
 import CheckboxElement from "./CheckboxElement";
 import { I18n } from "../models/I18n";
+import Checkbox3Element from "./Checkbox3Element";
 
 @customElement(MuscleGroupFilter.NAME)
 export default class MuscleGroupFilter extends (LitElement as TypedLitElement<MuscleGroupFilter, MuscleGroupFilterEventMap>) {
@@ -72,16 +73,16 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
     @property({ type: Boolean, reflect: true })
     active: boolean = false;
 
-    @query(".input-container checkbox-elem") input!: CheckboxElement;
+    @query(".input-container checkbox3-elem") input!: Checkbox3Element;
     @query(".refined-container checkbox-elem:first-of-type") primaryInput!: CheckboxElement;
     @query(".refined-container checkbox-elem:last-of-type") secondaryInput!: CheckboxElement;
 
     protected render(): unknown {
         return html`
             <div class="input-container">
-                <checkbox-elem
+                <checkbox3-elem
                         label=${this.label || Helper.toTitleCase(this.muscleGroup)} 
-                        @on-input=${() => this.onInput()}></checkbox-elem>
+                        @on-input=${() => this.onInput()}></checkbox3-elem>
                 <span
                         class="preview" 
                         @mouseover=${() => this.onPreviewToggle(true)} 
@@ -101,9 +102,9 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
     }
 
     onInput(skipUpdate: boolean = false) {
-        this.active = this.input.checked;
+        this.active = this.input.checked !== null;
 
-        if (this.input.checked) {
+        if (this.active) {
             this.primaryInput.checked = true;
             this.secondaryInput.checked = true;
 
@@ -120,11 +121,13 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
     }
 
     private onRefinedInput(skipUpdate: boolean = false) {
-        if (!this.primaryInput.checked && !this.secondaryInput.checked) {
+        const isExclude = !this.primaryInput.checked && !this.secondaryInput.checked;
+        if (isExclude) {
             this.value = MuscleGroupFilterValue.EXCLUDE;
         } else {
             this.value = (this.primaryInput.checked && this.secondaryInput.checked) ? MuscleGroupFilterValue.ALL : (this.primaryInput.checked ? MuscleGroupFilterValue.PRIMARY : MuscleGroupFilterValue.SECONDARY);
         }
+        this.input.checked = !isExclude;
 
         if (!skipUpdate) {
             this.internalOnUpdate();
@@ -136,7 +139,7 @@ export default class MuscleGroupFilter extends (LitElement as TypedLitElement<Mu
     }
 
     exclude(skipUpdate: boolean = false) {
-        this.input.checked = true;
+        this.input.checked = false;
         this.onInput(true);
         this.primaryInput.checked = false;
         this.secondaryInput.checked = false;

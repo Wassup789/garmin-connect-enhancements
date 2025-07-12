@@ -216,7 +216,7 @@ export default class ExerciseSelectorFilterMuscleGroups extends (LitElement as T
 
     private onClear() {
         this.filters.forEach((filter, i) => {
-            filter.input.checked = false;
+            filter.input.checked = null;
             filter.onInput(i !== this.filters.length - 1);
         });
         this.onActiveFiltersUpdate();
