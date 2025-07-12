@@ -7,7 +7,7 @@ import { addActivityNameSuggestion } from "./enhancements/ActivityNameEnhancemen
 const CHOSEN_PARENT_CONTAINER_SELECTOR = ".workout-name, .workout-step-exercises",
     WEIGHT_CONTAINER_SELECTOR = ".input-append.weight-entry",
     WORKOUT_EXERCISE_CONTAINER_SELECTOR = "[class^='ExercisePicker_dropdown_']",
-    ACTIVITY_NAME_SELECTOR = ".activity-name-edit",
+    ACTIVITY_NAME_SELECTOR = ".activity-name-edit, [class^='ActivityNameIconRow_activityTrophy']",
     CONTAINER_MAPPINGS: ReadonlyArray<[string, (parent: HTMLElement) => void]> = [
         [CHOSEN_PARENT_CONTAINER_SELECTOR, addExerciseContainersFromParent],
         [WEIGHT_CONTAINER_SELECTOR, addWeightContainersFromParent],

@@ -1,10 +1,11 @@
 import { OnObserverDestroyFunct } from "../models/OnObserverDestroyFunct";
-import ActivityNameSuggestion from "../components/ActivityNameSuggestion";
+import ActivityNameSuggestionBasicDelegate from "../delegates/activity-name-suggestion/ActivityNameSuggestionBasicDelegate";
+import ActivityNameSuggestionReactDelegate from "../delegates/activity-name-suggestion/ActivityNameSuggestionReactDelegate";
 
 export function addActivityNameSuggestion(container: HTMLElement): OnObserverDestroyFunct {
-    const element = new ActivityNameSuggestion(container);
+    const element = container.classList.contains("activity-name-edit") ? new ActivityNameSuggestionBasicDelegate(container) : new ActivityNameSuggestionReactDelegate(container);
 
     return () => {
-        element.disconnect();
+        element.activityNameSuggestion.disconnect();
     };
 }

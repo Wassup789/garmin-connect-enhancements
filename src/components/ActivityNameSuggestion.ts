@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import ExerciseSelector from "./ExerciseSelector";
 import Helper from "../helpers/Helper";
 import SnackbarService from "../services/SnackbarService";
@@ -7,6 +7,8 @@ import { I18n } from "../models/I18n";
 import ReactHelper from "../helpers/ReactHelper";
 import ExerciseOption from "../models/ExerciseOption";
 import TooltipService from "../services/TooltipService";
+import ActivityNameSuggestionDelegate from "../delegates/activity-name-suggestion/ActivityNameSuggestionDelegate";
+import ActivityNameSuggestionBasicDelegate from "../delegates/activity-name-suggestion/ActivityNameSuggestionBasicDelegate";
 
 type ExtractionResult = { exerciseOptions: ExerciseOption[]; exercises: Set<string> };
 
@@ -20,21 +22,24 @@ export default class ActivityNameSuggestion extends LitElement {
     private static readonly TABLE_ROW_FALLBACK_SELECTOR = "#setsContainer td:nth-child(2):not(:has(a))";
     private static readonly TOOLTIP_TITLE = "Suggest title";
 
-    private hostObserver: MutationObserver;
-    private bodyObserver: MutationObserver;
-
     static styles = css`
-        :host {
+        :host([hidden]) {
+            display: none;
+        }
+        
+        .container {
             --icon-size: 24px;
             display: inline-block;
             height: var(--icon-size);
-            margin-top: -25px;
             cursor: pointer;
             vertical-align: middle;
             user-select: none;
         }
-        :host([hidden]) {
-            display: none;
+        .container[type="basic"] {
+            margin-top: -25px;
+        }
+        .container[type="react"] {
+            margin-left: 15px;
         }
         
         svg {
@@ -44,56 +49,66 @@ export default class ActivityNameSuggestion extends LitElement {
         }
   `;
 
+    private hostObserver: MutationObserver;
+    private pageObserver: MutationObserver;
+
+    private readonly isBasic: boolean;
+
+    @query(".container") contentContainer!: HTMLDivElement;
+
     @property({ type: Boolean, reflect: true })
     hidden: boolean = false;
 
-    get hostEditButton(): HTMLButtonElement {
-        return this.hostContainer.querySelector(".inline-edit-trigger") as HTMLButtonElement;
-    }
-
-    get hostTextInput(): HTMLElement {
-        return this.hostContainer.querySelector(".inline-edit-editable-text") as HTMLElement;
-    }
-
-    constructor(private readonly hostContainer: HTMLElement) {
+    constructor(
+        private readonly delegate: ActivityNameSuggestionDelegate,
+        readonly hostContainer: HTMLElement
+    ) {
         super();
+
+        this.isBasic = delegate instanceof ActivityNameSuggestionBasicDelegate;
 
         this.hostObserver = new MutationObserver(() => this.onHostUpdate());
         this.hostObserver.observe(this.hostContainer, { childList: true, subtree: true, attributes: true });
 
-        this.bodyObserver = new MutationObserver(() => this.onHostUpdate());
-        this.bodyObserver.observe(document.body, { childList: true, subtree: true });
+        this.pageObserver = new MutationObserver(() => this.onPageUpdate());
+        this.pageObserver.observe(document.body, { childList: true, subtree: true });
 
         this.addEventListener("click", (e) => this.onClick(e));
+    }
 
-        TooltipService.INSTANCE.attach(this, ActivityNameSuggestion.TOOLTIP_TITLE);
+    firstUpdated() {
+        TooltipService.INSTANCE.attach(this.contentContainer, ActivityNameSuggestion.TOOLTIP_TITLE);
     }
 
     disconnect() {
         this.hostObserver.disconnect();
-        this.bodyObserver.disconnect();
+        this.pageObserver.disconnect();
     }
 
     protected render(): unknown {
         return html`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M852-212 732-332l56-56 120 120-56 56ZM708-692l-56-56 120-120 56 56-120 120Zm-456 0L132-812l56-56 120 120-56 56ZM108-212l-56-56 120-120 56 56-120 120Zm246-75 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-361Z"/></svg>
+            <div
+                    class="container" 
+                    type=${this.isBasic ? "basic" : "react"}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M852-212 732-332l56-56 120 120-56 56ZM708-692l-56-56 120-120 56 56-120 120Zm-456 0L132-812l56-56 120 120-56 56ZM108-212l-56-56 120-120 56 56-120 120Zm246-75 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-361Z"/></svg>
+            </div>
         `;
     }
 
-    private isHostReady(): boolean {
+    private isPageReady(): boolean {
         return Boolean(document.querySelector(`${ActivityNameSuggestion.TABLE_SELECTOR}, ${ExerciseSelector.NAME}`));
     }
 
-    private onHostUpdate() {
-        const isEditing = this.hostContainer?.classList.contains("edit");
-
-        this.hidden = isEditing;
-
-        if (!this.hostContainer.querySelector(ActivityNameSuggestion.NAME) && this.isHostReady()) {
-            this.hostContainer.insertBefore(this, this.hostContainer.querySelector(".inline-edit-editable"));
-
-            this.bodyObserver.disconnect();
+    private onPageUpdate() {
+        if (!this.hostContainer.querySelector(ActivityNameSuggestion.NAME) && this.isPageReady()) {
+            this.hostContainer.insertBefore(this, this.delegate.hostInsertBeforeElem);
         }
+    }
+
+    private onHostUpdate() {
+        this.hidden = this.delegate.isEditing;
+
+        this.delegate.onHostUpdate();
     }
 
     private onClick(e: MouseEvent) {
@@ -108,8 +123,8 @@ export default class ActivityNameSuggestion extends LitElement {
             return;
         }
 
-        this.hostTextInput.innerText = Array.from(exercises).join(" x ");
-        this.hostEditButton.click();
+        this.delegate.startEditing();
+        this.delegate.setInputValue(Array.from(exercises).join(" x "));
     }
 
     private extractExercises(): Set<string> {

@@ -6,6 +6,17 @@ type PropKeysArray = string[];
 export type PropKeys = PropKeysObject | PropKeysArray;
 
 export default class ReactHelper {
+    static updateInput(elem: HTMLInputElement, value: string) {
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+            elem.constructor.prototype,
+            "value"
+        )!.set!;
+        nativeInputValueSetter.call(elem, value);
+
+        const e = new Event("input", { bubbles: true });
+        elem.dispatchEvent(e);
+    }
+
     static closestProps(
         elem: HTMLElement,
         propKeys: PropKeys,
