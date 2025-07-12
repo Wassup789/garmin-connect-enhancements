@@ -11,7 +11,7 @@ export default class ActivityNameSuggestionReactDelegate extends ActivityNameSug
     }
 
     override get hostInsertBeforeElem(): HTMLElement | null {
-        return null;
+        return this.activityNameSuggestion.hostContainer.querySelector("[class^='ActivityNameIconRow_prContainer']");
     }
 
     override get isEditing(): boolean {

@@ -23,6 +23,9 @@ export default class ActivityNameSuggestion extends LitElement {
     private static readonly TOOLTIP_TITLE = "Suggest title";
 
     static styles = css`
+        :host {
+            pointer-events: none;
+        }
         :host([hidden]) {
             display: none;
         }
@@ -34,12 +37,13 @@ export default class ActivityNameSuggestion extends LitElement {
             cursor: pointer;
             vertical-align: middle;
             user-select: none;
+            pointer-events: auto;
         }
         .container[type="basic"] {
             margin-top: -25px;
         }
         .container[type="react"] {
-            margin-left: 15px;
+            margin-left: 20px;
         }
         
         svg {
