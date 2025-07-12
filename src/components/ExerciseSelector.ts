@@ -15,6 +15,8 @@ export default class ExerciseSelector extends (LitElement as TypedLitElement<Exe
     static readonly EVENT_ON_DISCONNECT = "on-disconnect";
 
     static readonly CLOSEST_DIALOG_SELECTOR = "[class^=\"Dialog\"]";
+    static readonly CLOSEST_WORKOUT_STEP_SELECTOR = "[class^='WorkoutStep']";
+    static readonly CLOSEST_SINGLE_APPLY_SELECTOR = `${ExerciseSelector.CLOSEST_DIALOG_SELECTOR}, ${ExerciseSelector.CLOSEST_WORKOUT_STEP_SELECTOR}`;
 
     static styles = css`
         * {
