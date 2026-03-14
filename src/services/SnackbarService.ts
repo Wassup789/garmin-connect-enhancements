@@ -3,6 +3,9 @@ import GenericSnackbar from "../components/GenericSnackbar";
 export default class SnackbarService {
     private static _instance: SnackbarService = null as unknown as never;
 
+    public static readonly DURATION_SHORT = 2750;
+    public static readonly DURATION_LONG = 4500;
+
     static get INSTANCE(): SnackbarService {
         if (!this._instance) {
             this._instance = new SnackbarService();

@@ -8,8 +8,6 @@ export type HistoryData = { readonly elem: ExerciseSelector; readonly previousVa
 export default class HistoryService {
     private static _instance: HistoryService = null as unknown as never;
 
-    private static readonly SNACKBAR_DURATION = 4500;
-
     static get INSTANCE(): HistoryService {
         if (!this._instance) {
             this._instance = new HistoryService();
@@ -40,7 +38,7 @@ export default class HistoryService {
         snackbarService.dismiss();
 
         if (this.currentHistory.length > 0 && showSnackbar) {
-            snackbarService.show(`Updated ${this.currentHistory.length} set${this.currentHistory.length === 1 ? "" : "s"}`, HistoryService.SNACKBAR_DURATION, "Undo")
+            snackbarService.show(`Updated ${this.currentHistory.length} set${this.currentHistory.length === 1 ? "" : "s"}`, SnackbarService.DURATION_LONG, "Undo")
                 .addEventListener(GenericSnackbar.EVENT_ACTION, () => this.undo());
         }
     }
