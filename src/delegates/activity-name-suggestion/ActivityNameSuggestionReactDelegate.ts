@@ -2,7 +2,7 @@ import ActivityNameSuggestionDelegate from "./ActivityNameSuggestionDelegate";
 import ReactHelper from "../../helpers/ReactHelper";
 
 export default class ActivityNameSuggestionReactDelegate extends ActivityNameSuggestionDelegate {
-    private static readonly INPUT_SELECTOR = "input[class*='InlineActivityNameEdit']";
+    private static readonly INPUT_SELECTOR = "[class*='InlineActivityNameEdit'] input";
 
     private nextRenderTextValue: string | null = null;
 
