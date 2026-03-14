@@ -28,6 +28,7 @@ Available as a [Chrome extension][cws-url], [Firefox add-on][faddon-url], or [in
   * [Filter exercises by muscle group or equipment](#filter-exercises-by-muscle-group-or-equipment)
   * [Preview an exercise's muscle group targets](#preview-an-exercises-muscle-group-targets)
   * [Apply the same exercise to multiple sets at once](#apply-the-same-exercise-to-multiple-sets-at-once)
+  * [Clone exercises and sets](#clone-exercises-and-sets)
   * [Activity name suggestion](#activity-name-suggestion)
   * [Exercise weight retention](#exercise-weight-retention)
   * [Favoriting exercises](#favoriting-exercises)
@@ -72,6 +73,12 @@ an exercise, an option is added to apply the exercise to all the other sets, set
 every other set, and more.
 
 <video height="300" src="https://github.com/Wassup789/garmin-connect-enhancements/assets/1007707/73eee228-b025-46ee-b434-db2ce3975e0e"></video>
+
+### Clone exercises and sets
+
+When editing a workout, you can now clone exercises and sets to ease the process of creating multiple sets with the same exercise.
+
+<img height="344" src="assets/clone-exercises-and-sets.png"/>
 
 ### Activity name suggestion
 
