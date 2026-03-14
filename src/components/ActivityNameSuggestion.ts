@@ -9,6 +9,7 @@ import ExerciseOption from "../models/ExerciseOption";
 import TooltipService from "../services/TooltipService";
 import ActivityNameSuggestionDelegate from "../delegates/activity-name-suggestion/ActivityNameSuggestionDelegate";
 import ActivityNameSuggestionBasicDelegate from "../delegates/activity-name-suggestion/ActivityNameSuggestionBasicDelegate";
+import ExerciseSelectorPopup from "./ExerciseSelectorPopup";
 
 type ExtractionResult = { exerciseOptions: ExerciseOption[]; exercises: Set<string> };
 
@@ -186,7 +187,8 @@ export default class ActivityNameSuggestion extends LitElement {
         const tableElem = document.querySelector(ActivityNameSuggestion.TABLE_SELECTOR) as HTMLElement,
             props = ReactHelper.closestProps(tableElem, ["exerciseSets"], 10),
             exerciseOptions: ExerciseOption[] = [],
-            exercises = new Set<string>();
+            exercises = new Set<string>(),
+            isPlaceholderName = (name: string) => ExerciseSelectorPopup.EMPTY_EXERCISE_NAME.value === name;
 
         if (props && "exerciseSets" in props && Array.isArray(props.exerciseSets)) {
             for (const exerciseSet of props.exerciseSets) {
@@ -198,6 +200,10 @@ export default class ActivityNameSuggestion extends LitElement {
                     const originalName: string = ("localizeString" in exerciseSet && typeof exerciseSet.localizeString === "string" && exerciseSet.localizeString) ? exerciseSet.localizeString : exerciseSet.exerciseKey,
                         name = I18n.getExerciseTranslationWithExercisePair(exerciseSet.exerciseKey, exerciseSet.categoryKey, originalName);
 
+                    if (isPlaceholderName(name)) {
+                        continue;
+                    }
+
                     exerciseOptions.push(new ExerciseOption(exerciseSet.exerciseKey, exerciseSet.categoryKey, name, false));
                     exercises.add(name);
                 }
@@ -206,7 +212,7 @@ export default class ActivityNameSuggestion extends LitElement {
             Array.from(document.querySelectorAll(ActivityNameSuggestion.TABLE_ROW_FALLBACK_SELECTOR))
                 .map((e) => (e as HTMLElement).innerText.trim())
                 .forEach((e) => {
-                    if (e) {
+                    if (e && !isPlaceholderName(e)) {
                         exercises.add(e);
                     }
                 });
