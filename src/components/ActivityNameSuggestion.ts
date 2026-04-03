@@ -19,7 +19,7 @@ export default class ActivityNameSuggestion extends LitElement {
 
     private static readonly MAX_EXERCISES_FOR_TITLE = 3;
     private static readonly SNACKBAR_DURATION = 3000;
-    private static readonly TABLE_SELECTOR = "[class*='StrengthTable_table']";
+    private static readonly TABLE_SELECTOR = "table[class*='StrengthTable_table']";
     private static readonly TABLE_ROW_FALLBACK_SELECTOR = "#setsContainer td:nth-child(2):not(:has(a))";
     private static readonly TOOLTIP_TITLE = "Suggest title";
 
