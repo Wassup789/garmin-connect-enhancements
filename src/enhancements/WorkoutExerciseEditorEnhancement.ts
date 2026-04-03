@@ -6,8 +6,8 @@ export function takeoverWorkoutExerciseEditor(container: HTMLElement): OnObserve
     let exerciseSelectorDelegate: ExerciseSelectorReactDelegate | null = null;
 
     try {
-        const props = ReactHelper.closestProps(container, ["exerciseKey", "categoryKey", "onChange"], 20),
-            exerciseProps = ReactHelper.closestProps(container, ["flattenedExerciseTypes"], 20);
+        const props = ReactHelper.closestProps(container, ["exerciseKey", "categoryKey", "onChange"], 50),
+            exerciseProps = ReactHelper.closestProps(container, ["flattenedExerciseTypes"], 50);
         if (props && exerciseProps) {
             exerciseSelectorDelegate = new ExerciseSelectorReactDelegate(props, exerciseProps, container);
             container.parentElement!.append(exerciseSelectorDelegate.exerciseSelector);
