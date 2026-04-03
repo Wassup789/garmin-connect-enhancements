@@ -134,7 +134,7 @@ export default class ExerciseSelectorPopup extends LitElement {
 
     private host: ExerciseSelector | null = null;
     private readonly scrollListeners: Set<HTMLElement> = new Set();
-    private usesBodyCandidate: boolean = false;
+    private bodyCandidate: HTMLElement | null = null;
     @state()
     private suggestedGroup: ExerciseGroup | null = null;
 
@@ -315,9 +315,9 @@ export default class ExerciseSelectorPopup extends LitElement {
         this.suggestedGroup.options.forEach((e) => this.setupOptionElement(e));
 
         const bodyCandidate = document.querySelector(".main-body");
-        this.usesBodyCandidate = Boolean(bodyCandidate && bodyCandidate.contains(this.host));
-        if (this.usesBodyCandidate) {
-            bodyCandidate!.append(this);
+        this.bodyCandidate = (bodyCandidate && bodyCandidate.contains(this.host)) ? bodyCandidate as HTMLElement : null;
+        if (this.bodyCandidate) {
+            this.bodyCandidate!.append(this);
         } else {
             this.host.renderRoot.append(this);
         }
@@ -607,13 +607,12 @@ export default class ExerciseSelectorPopup extends LitElement {
     }
 
     updatePositioning = () => {
-        if (this.host && this.usesBodyCandidate) {
+        if (this.host && this.bodyCandidate) {
             const rect = this.host.getBoundingClientRect(),
-                scrollParent = this.getScrollParent(this.parentElement),
-                scrollParentRect = scrollParent?.getBoundingClientRect();
+                bodyCandidateRect = this.bodyCandidate.getBoundingClientRect();
 
-            this.style.left = `${rect.left + (scrollParent?.scrollLeft ?? 0) - (scrollParentRect?.left ?? 0)}px`;
-            this.style.top = `${rect.top + (scrollParent?.scrollTop ?? 0) - (scrollParentRect?.top ?? 0)}px`;
+            this.style.left = `${rect.left + (this.bodyCandidate.scrollLeft ?? 0) - (bodyCandidateRect?.left ?? 0)}px`;
+            this.style.top = `${rect.top + (this.bodyCandidate.scrollTop ?? 0) - (bodyCandidateRect?.top ?? 0)}px`;
             this.style.setProperty("--width", `${rect.width}px`);
         } else {
             this.style = "";
@@ -621,7 +620,7 @@ export default class ExerciseSelectorPopup extends LitElement {
     };
 
     setupScrollListeners = () => {
-        if (this.host && this.usesBodyCandidate) {
+        if (this.host && this.bodyCandidate) {
             let node = this.getScrollParent(this.host);
             while (node) {
                 if (!this.scrollListeners.has(node)) {
