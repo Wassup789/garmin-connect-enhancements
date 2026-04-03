@@ -59,6 +59,7 @@ export default class ExerciseSelectorPopup extends LitElement {
             
             --input-width: var(--width, 100%);
             --filters-width: 275px;
+            --link-color: #1976d2;
             --border-color: #d5d5d5;
         }
 
@@ -132,6 +133,8 @@ export default class ExerciseSelectorPopup extends LitElement {
     `;
 
     private host: ExerciseSelector | null = null;
+    private readonly scrollListeners: Set<HTMLElement> = new Set();
+    private usesBodyCandidate: boolean = false;
     @state()
     private suggestedGroup: ExerciseGroup | null = null;
 
@@ -225,6 +228,8 @@ export default class ExerciseSelectorPopup extends LitElement {
 
         document.addEventListener("click", this.onDocumentClick);
         document.addEventListener("keydown", this.onDocumentKeydown);
+        window.addEventListener("scroll", this.updatePositioning);
+        window.addEventListener("resize", this.setupScrollListeners);
         // window.addEventListener("blur", this.onWindowBlur);
     }
 
@@ -309,7 +314,14 @@ export default class ExerciseSelectorPopup extends LitElement {
 
         this.suggestedGroup.options.forEach((e) => this.setupOptionElement(e));
 
-        this.host.renderRoot.append(this);
+        const bodyCandidate = document.querySelector(".main-body");
+        this.usesBodyCandidate = Boolean(bodyCandidate && bodyCandidate.contains(this.host));
+        if (this.usesBodyCandidate) {
+            bodyCandidate!.append(this);
+        } else {
+            this.host.renderRoot.append(this);
+        }
+        this.setupScrollListeners();
 
         await this.updateComplete;
 
@@ -318,6 +330,9 @@ export default class ExerciseSelectorPopup extends LitElement {
 
     deactivate() {
         this.remove();
+
+        this.scrollListeners.forEach((e) => e.removeEventListener("scroll", this.updatePositioning));
+        this.scrollListeners.clear();
 
         this.suggestedGroup?.options.forEach((e) => this.disconnectOptionElement(e));
         this.suggestedGroup = null;
@@ -560,7 +575,7 @@ export default class ExerciseSelectorPopup extends LitElement {
     };
 
     onDocumentClick = (event: MouseEvent) => {
-        if (event.target !== this.host) {
+        if (event.target !== this.host && event.target !== this) {
             this.deactivate();
         }
     };
@@ -577,6 +592,48 @@ export default class ExerciseSelectorPopup extends LitElement {
 
     onWindowBlur = () => {
         this.deactivate();
+    };
+
+    private getScrollParent(node: HTMLElement | null): HTMLElement | null {
+        if (node == null) {
+            return null;
+        }
+
+        if (node.scrollHeight > node.clientHeight || node.scrollWidth > node.clientWidth) {
+            return node;
+        } else {
+            return this.getScrollParent(node.parentNode as HTMLElement);
+        }
+    }
+
+    updatePositioning = () => {
+        if (this.host && this.usesBodyCandidate) {
+            const rect = this.host.getBoundingClientRect(),
+                scrollParent = this.getScrollParent(this.parentElement),
+                scrollParentRect = scrollParent?.getBoundingClientRect();
+
+            this.style.left = `${rect.left + (scrollParent?.scrollLeft ?? 0) - (scrollParentRect?.left ?? 0)}px`;
+            this.style.top = `${rect.top + (scrollParent?.scrollTop ?? 0) - (scrollParentRect?.top ?? 0)}px`;
+            this.style.setProperty("--width", `${rect.width}px`);
+        } else {
+            this.style = "";
+        }
+    };
+
+    setupScrollListeners = () => {
+        if (this.host && this.usesBodyCandidate) {
+            let node = this.getScrollParent(this.host);
+            while (node) {
+                if (!this.scrollListeners.has(node)) {
+                    node.addEventListener("scroll", this.updatePositioning);
+                    this.scrollListeners.add(node);
+                }
+
+                node = this.getScrollParent(node.parentNode as HTMLElement);
+            }
+        }
+
+        this.updatePositioning();
     };
 
     private updateFilterVisibilityForOption(option: ExerciseOption) {
